@@ -6,6 +6,7 @@
   "scripts": {
     "test": "mocha test/main.test.js --reporter allure-mocha --timeout 60000",
     "test:template": "mocha test/suites/suite.template.test.js --reporter allure-mocha --timeout 60000",
+    "test:pessoa:feliz": "mocha test/suites/pessoa.feliz.test.js",
 
     "set:chrome": "node test/config/definir-navegador.js chrome",
     "set:firefox": "node test/config/definir-navegador.js firefox",

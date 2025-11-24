@@ -1,6 +1,7 @@
 import { By, until } from "selenium-webdriver";
 import * as allure from "allure-js-commons";
 import assert from 'assert';
+import { tirarPrint } from "./tirarPrint.js";
 import { obterBaseUrl } from "../config/global.config.js";
 
 async function login(driver) {
@@ -79,16 +80,6 @@ async function login(driver) {
         console.error('Erro durante o login:', error.message);
         await tirarPrint(driver, "Erro durante o login");
         throw error;
-    }
-}
-
-async function tirarPrint(driver, stepName) {
-    try {
-        const screenshot = await driver.takeScreenshot();
-        allure.attachment(`${stepName}.png`, Buffer.from(screenshot, 'base64'), 'image/png');
-        console.log(`Screenshot capturada para o passo: ${stepName}`);
-    } catch (screenshotError) {
-        console.error('Erro ao capturar screenshot:', screenshotError.message);
     }
 }
 
