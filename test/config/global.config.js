@@ -47,8 +47,8 @@ export function obterBaseUrl() {
   const ambiente = obterAmbienteAtual();
 
   return ambiente === "prod"
-    ? "https://jurisprudencia.aasp.org.br":
-    ambiente === "homolog" ?
-    "https://jurisprudencia.homolog.aasp.org.br" :
-    "localhost:3000";
+    ? "https://aaspgerenciador.aasp.org.br" 
+    : ambiente === "homolog" 
+    ? "https://aaspgerenciador.homolog.aasp.org.br" 
+    : "http://localhost:3000"; 
 }

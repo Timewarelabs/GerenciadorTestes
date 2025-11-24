@@ -6,21 +6,19 @@
   "scripts": {
     "test": "mocha test/main.test.js --reporter allure-mocha --timeout 60000",
     "test:template": "mocha test/suites/suite.template.test.js --reporter allure-mocha --timeout 60000",
-
+    "test:empresa:feliz" : "mocha test/suites/empresa.feliz.test",
+    "test:empresa:triste" : "mocha test/suites/empresa.triste.test",
     "set:chrome": "node test/config/definir-navegador.js chrome",
     "set:firefox": "node test/config/definir-navegador.js firefox",
     "set:prod": "node test/config/definir-ambiente.js prod",
     "set:homolog": "node test/config/definir-ambiente.js homolog",
     "set:local": "node test/config/definir-ambiente.js local",
-
     "allure:report": "allure generate allure-results --clean -o allure-report",
     "allure:open": "allure open allure-report",
-
     "allure:api": "node scripts/abrir-servicos-allure.js api",
     "allure:dash": "node scripts/abrir-servicos-allure.js dash",
     "allure:dash:imediato": "node scripts/abrir-servicos-allure.js imediato",
     "allure:dash:historico": "node scripts/abrir-servicos-allure.js historico",
-    
     "allure:server:start": "docker-compose up -d allure allure-ui",
     "allure:server:stop": "docker-compose down",
     "allure:server:logs": "docker logs -f allure-api"
