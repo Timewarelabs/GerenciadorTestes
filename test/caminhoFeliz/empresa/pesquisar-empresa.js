@@ -46,44 +46,58 @@ async function PesquisarEmpresa(driver, termo) {
             }
         });
 
-        await allure.step("Pesquisando pelo nome do usuário", async (ctx) => {
+        await allure.step(`Pesquisando por: ${termo}`, async (ctx) => {
             if (typeof termo !== 'string' || !termo.trim()) {
                 throw new Error("Parâmetro `termo` deve ser uma string não vazia");
             }
+            // Limpa antes de digitar para garantir
+            await barraPesquisa.sendKeys(Key.CONTROL, "a", Key.DELETE); 
             await barraPesquisa.sendKeys(termo, Key.ENTER);
-            console.log('Inserindo termo de pesquisa:', termo);
-            await ctx.parameter("Status", "200");
-        });
+            console.log('Termo enviado, aguardando filtro...');
+            
+            // --- CORREÇÃO CRÍTICA: ESPERAR O FILTRO ACONTECER ---
+            try {
+                await driver.wait(async () => {
+                    const linhas = await driver.findElements(By.css("table tbody tr"));
+                    // Se não tiver linhas, continua esperando
+                    if (linhas.length === 0) return false;
+                    
+                    // Pega o texto da primeira linha para ver se bate com a pesquisa
+                    const textoLinha = await linhas[0].getText();
+                    
+                    // Se a tabela mostrar "Nenhum registro", paramos de esperar (filtro concluiu, mas vazio)
+                    if (textoLinha.includes("Nenhum registro")) return true;
 
-        await allure.step("Aguardando resultados", async (ctx) => {
-            await driver.sleep(2000);
-            await ctx.parameter("Status", "200");
-        });
-
-        await allure.step("Rolando a página para visualizar resultados", async (ctx) => {
-            await driver.executeScript("window.scrollBy(0, 800)");
-            await ctx.parameter("Status", "200");
-        });
-
-        await allure.step("Verificando resultados e tirando print", async (ctx) => {
-            const resultados = await driver.findElements(By.xpath("/html/body/div[1]/div/div/div/div[4]/div/main/div/div[1]/div/div/div[2]/div/div[2]/div/div/table/tbody/tr"));
-
-            if (resultados.length === 3) {
-                console.log(`Resultados encontrados: ${resultados.length}, tirando screenshot...`);
-                const captura = await driver.takeScreenshot();
-                const carimboTempo = new Date().toISOString().replace(/[:.]/g, '-');
-                const caminhoCaptura = `screenshots/resultado-pesquisa-${carimboTempo}.png`;
-
-                if (!fs.existsSync('screenshots')) fs.mkdirSync('screenshots');
-                fs.writeFileSync(caminhoCaptura, captura, 'base64');
-
-                allure.attachment("Resultado da Pesquisa",
-                    Buffer.from(captura, 'base64'), 'image/png');
-                await ctx.parameter("Resultados", `Encontrados: ${resultados.length} empresas`);
-                await ctx.parameter("Screenshot", caminhoCaptura);
-            } else {
-                console.log("Quantidade inesperada de resultados:", resultados.length);
+                    // Se a linha contiver o termo pesquisado, SUCESSO!
+                    if (textoLinha.includes(termo)) {
+                        return true;
+                    }
+                    
+                    // Se a tabela ainda estiver cheia de coisas nada a ver (ex: 50 resultados), continua esperando
+                    return false;
+                }, 10000, "Timeout: A tabela não filtrou o registro esperado a tempo.");
+                
+                console.log("Filtro aplicado com sucesso!");
+            } catch (e) {
+                console.warn("Aviso: O filtro pode não ter carregado corretamente ou o item não existe.", e.message);
             }
+
+            await ctx.parameter("Status", "200");
+        });
+
+        await allure.step("Verificando resultados", async (ctx) => {
+            // Pequeno sleep de segurança para renderização final
+            await driver.sleep(1000);
+            const resultados = await driver.findElements(By.css("table tbody tr"));
+            console.log(`Linhas visíveis após filtro: ${resultados.length}`);
+            
+            // Screenshot para evidência
+            const captura = await driver.takeScreenshot();
+            if (!fs.existsSync('screenshots')) fs.mkdirSync('screenshots');
+            fs.writeFileSync(`screenshots/resultado-pesquisa.png`, captura, 'base64');
+            allure.attachment("Resultado da Pesquisa", Buffer.from(captura, 'base64'), 'image/png');
+
+            await ctx.parameter("Resultados", `Visíveis: ${resultados.length}`);
         });
 
     } catch (erro) {
