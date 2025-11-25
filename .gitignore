@@ -1,4 +1,4 @@
 /node_modules
 /allure-results
 /allure-report
-navegador-escolhido.json
+test/config/navegador-escolhido.json
