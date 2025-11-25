@@ -2,7 +2,7 @@ import * as allure from "allure-js-commons";
 import { configurarDriver } from "../config/navegador.config.js";
 import { configurarAmbiente } from "../config/ambienteAllure.js";
 import { setupExecutor } from "../config/executor.js";
-import { login as fazerLogin } from "../comum/login.js"; 
+import { login } from "../comum/login.js"; 
 import { setupAllure, enviarResultadosParaServidor } from "../../scripts/servicos-allure.js";
 
 import { falhaCriarPessoa } from '../caminhoTriste/pessoa/falhaCriarPessoa.js'; 

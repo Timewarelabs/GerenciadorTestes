@@ -115,7 +115,7 @@ async function falhaCriarContratoComCampoNumero(driver) {
                 await driver.sleep(1000);
 
                 // Clicar no "ADICIONAR NOVA PESSOA" usando o texto
-                const botaoAdicionar = await driver.wait( // Renomeada: addButton
+                const botaoAdicionar = await driver.wait( 
                     until.elementLocated(By.xpath("//p[normalize-space(.)='ADICIONAR NOVA PESSOA']")),
                     10000
                 ); 
@@ -182,7 +182,6 @@ async function falhaCriarContratoComCampoNumero(driver) {
             }
         });       
             
-        // Verifica se o bug foi detectado durante o preenchimento do formulário
         if (bugDetectado) {
             await tirarPrint(driver, "Validacao falhou - numero com letra permitido");
             await assert.fail(mensagemBug);

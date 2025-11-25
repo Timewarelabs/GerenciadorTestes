@@ -36,7 +36,7 @@ async function falhaAtualizarPessoa(driver) {
 
     await allure.step("Tentando atualizar com nome muito longo", async (ctx) => {
         try {
-            const nomeInvalido = "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Este nome é muito longo."; // Renomeada: nomeGrande -> nomeInvalido
+            const nomeInvalido = "Lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Este nome é muito longo.";
             
             await driver.sleep(500);
             

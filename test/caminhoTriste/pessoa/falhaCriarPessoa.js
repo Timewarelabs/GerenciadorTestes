@@ -1,11 +1,9 @@
-import { By, until, Key } from 'selenium-webdriver'; // Adicionando Key para fechar o modal
+import { By, until } from 'selenium-webdriver';
 import * as allure from "allure-js-commons";
 import assert from 'assert';
-// Importando o serviço de screenshot padronizado
 import { tirarPrint } from "../../comum/tirarPrint.js"; 
 import { obterBaseUrl } from "../../config/global.config.js";
 
-// Renomeada: failedCreatePerson -> falhaCriarPessoa
 async function falhaCriarPessoa(driver) {
     try {
         console.log("Iniciando cadastro de pessoa...");
