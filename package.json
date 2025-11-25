@@ -9,6 +9,10 @@
     "test:pessoa:feliz": "mocha test/suites/pessoa.feliz.test.js",
     "test:pessoa:triste": "mocha test/suites/pessoa.triste.test.js",
 
+    "test:contrato:feliz": "mocha test/suites/contrato.feliz.test.js",
+    "test:contrato:triste": "mocha test/suites/contrato.triste.test.js",
+    "test:contrato:todos": "mocha test/suites/contrato.*.test.js",
+
     "set:chrome": "node test/config/definir-navegador.js chrome",
     "set:firefox": "node test/config/definir-navegador.js firefox",
     "set:prod": "node test/config/definir-ambiente.js prod",

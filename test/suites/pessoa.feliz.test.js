@@ -15,46 +15,28 @@ import { buscarPessoa } from '../caminhoFeliz/pessoa/buscarPessoa.js';
 
 
 describe("Validação de acesso ao site", function () {
-  this.timeout(60000);
-  let driver;
-  let loginSucesso = false;
+    this.timeout(60000);
+    let driver;
 
-    before(async function() {
-        if (global.sharedDriver && global.isLoggedIn) {
-            driver = global.sharedDriver;
-            loginSucesso = true;
-        } else { 
-            console.log("Iniciando suíte de testes (Setup e Login)...");
-            setupAllure(); 
-            configurarAmbiente(); 
-            setupExecutor();
-            
-            driver = await configurarDriver(); 
+    before(async function () {
+        console.log("Iniciando suíte de acesso ao site");
+        setupAllure();
+        configurarAmbiente();
+        setupExecutor();
 
-            try {
-                await fazerLogin(driver);
-                loginSucesso = true;
-                global.isLoggedIn = true; 
-                console.log("Login inicial concluído com sucesso.");
-            } catch (error) {
-                console.error('Login inicial falhou no before hook. Testes serão pulados.');
-                loginSucesso = false;
-                throw error; 
-            }
-        }
+        driver = await configurarDriver();
+
+        await login(driver);
     });
 
-    after(async function() {
+    after(async function () {
         console.log("Finalizando suíte de testes...");
-        if (driver && !global.sharedDriver) {
-            await driver.quit();
-        }
+        if (driver) await driver.quit();
         await enviarResultadosParaServidor();
     });
 
     
     it('TESTE: Deve cadastrar pessoa preenchendo apenas campos obrigatórios', async function() {
-        if (!loginSucesso) return;
         allure.parentSuite("FluxoFeliz");
         allure.suite("Pessoa");
         allure.subSuite("CadastroObrigatorio");
@@ -62,7 +44,6 @@ describe("Validação de acesso ao site", function () {
     });
 
     it('TESTE: Deve cadastrar pessoa preenchendo todos os campos', async function() {
-        if (!loginSucesso) return;
         allure.parentSuite("FluxoFeliz");
         allure.suite("Pessoa");
         allure.subSuite("CadastroCompleto");
@@ -70,7 +51,6 @@ describe("Validação de acesso ao site", function () {
     });
         
     it('TESTE: Deve atualizar os dados da pessoa', async function() {
-        if (!loginSucesso) return;
         allure.parentSuite("FluxoFeliz");
         allure.suite("Pessoa");
         allure.subSuite("AtualizacaoCompleta");
@@ -78,7 +58,6 @@ describe("Validação de acesso ao site", function () {
     });
 
     it('TESTE: Deve atualizar apenas o nome da pessoa', async function() {
-        if (!loginSucesso) return;
         allure.parentSuite("FluxoFeliz");
         allure.suite("Pessoa");
         allure.subSuite("AtualizacaoDeNome");
@@ -86,7 +65,6 @@ describe("Validação de acesso ao site", function () {
     });
 
     it('TESTE: Deve tentar excluir a pessoa e cancelar a operação', async function() {
-        if (!loginSucesso) return;
         allure.parentSuite("FluxoFeliz");
         allure.suite("Pessoa");
         allure.subSuite("CancelamentoDeExclusao");
@@ -95,7 +73,6 @@ describe("Validação de acesso ao site", function () {
     });
 
     it('TESTE: Deve excluir a pessoa após a confirmação', async function() {
-        if (!loginSucesso) return;
         allure.parentSuite("FluxoFeliz");
         allure.suite("Pessoa");
         allure.subSuite("ExclusaoBemSucedida");

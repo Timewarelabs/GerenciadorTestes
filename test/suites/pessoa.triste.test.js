@@ -13,46 +13,28 @@ import { buscarPessoa } from "../caminhoFeliz/pessoa/buscarPessoa.js";
 
 
 describe('TestesCaminhoTristePessoa', function() { 
-    this.timeout(1200000); 
+    this.timeout(60000);
     let driver;
-    let loginSucesso = false; 
 
-    before(async function() {
-        if (global.sharedDriver && global.isLoggedIn) {
-            driver = global.sharedDriver;
-            loginSucesso = true;
-        } else { 
-            console.log("Iniciando suíte de testes (Setup e Login)...");
-            setupAllure(); 
-            configurarAmbiente(); 
-            setupExecutor();
-            
-            driver = await configurarDriver(); 
+    before(async function () {
+        console.log("Iniciando suíte de acesso ao site");
+        setupAllure();
+        configurarAmbiente();
+        setupExecutor();
 
-            try {
-                await fazerLogin(driver);
-                loginSucesso = true;
-                global.isLoggedIn = true; 
-                console.log("Login inicial concluído com sucesso.");
-            } catch (error) {
-                console.error('Login inicial falhou no before hook. Testes serão pulados.');
-                loginSucesso = false;
-                throw error; 
-            }
-        }
+        driver = await configurarDriver();
+
+        await login(driver);
     });
 
-    after(async function() {
+    after(async function () {
         console.log("Finalizando suíte de testes...");
-        if (driver && !global.sharedDriver) {
-            await driver.quit();
-        }
+        if (driver) await driver.quit();
         await enviarResultadosParaServidor();
     });
 
     
     it('TESTE: Deve falhar ao cadastrar pessoa com campo obrigatório Nome vazio', async function() {
-        if (!loginSucesso) return;
         allure.parentSuite("CaminhoTriste");
         allure.suite("Pessoa");
         allure.subSuite("FalhaCadastroObrigatorio");
@@ -60,7 +42,6 @@ describe('TestesCaminhoTristePessoa', function() {
     });
 
     it('TESTE: Deve falhar ao atualizar pessoa com campo Nome muito longo', async function() {
-        if (!loginSucesso) return;
         allure.parentSuite("CaminhoTriste");
         allure.suite("Pessoa");
         allure.subSuite("FalhaAtualizacaoNomeLongo");
@@ -70,7 +51,6 @@ describe('TestesCaminhoTristePessoa', function() {
     });
 
     it('TESTE: Deve falhar ao atualizar pessoa com campo obrigatório vazio', async function() {
-        if (!loginSucesso) return;
         allure.parentSuite("CaminhoTriste");
         allure.suite("Pessoa");
         allure.subSuite("FalhaAtualizacaoObrigatoria");
@@ -80,7 +60,6 @@ describe('TestesCaminhoTristePessoa', function() {
     });
 
     it('TESTE: Deve falhar ao atualizar pessoa com CPF inválido', async function() {
-        if (!loginSucesso) return;
         allure.parentSuite("CaminhoTriste");
         allure.suite("Pessoa");
         allure.subSuite("FalhaAtualizacaoCPFInvalido");
