@@ -3,7 +3,7 @@ import { Buffer } from "buffer";
 
 async function tirarPrint(driver, stepName) {
     try {
-        const screenshot = await driver.tirar();
+        const screenshot = await driver.takeScreenshot();
         allure.attachment(`${stepName}.png`, Buffer.from(screenshot, 'base64'), 'image/png');
         console.log(`Screenshot capturada para o passo: ${stepName}`);
     } catch (screenshotError) {
