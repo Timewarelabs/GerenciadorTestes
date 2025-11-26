@@ -1,37 +1,37 @@
 import { By, Key, until } from 'selenium-webdriver';
 import * as allure from "allure-js-commons";
 import assert from 'assert';
-import { CapturaTela } from '../../comum/captura.js';
+import { tirarPrint } from '../../comum/tirarPrint.js';
 
 async function FalhaAtualizarEmpresaCNPJ(driver) {
     
-    // Unifiquei a lógica de clique para usar a mais estável (table tbody tr)
-    await allure.step("Clicando na última empresa", async (ctx) => {
+    // PASSO DE CLIQUE IDÊNTICO AO ATUALIZAR-EMPRESA.JS
+    await allure.step("Clicando na última pessoa", async (ctx) => {
         try {
             const linhas = await driver.findElements(By.css("table tbody tr"));
-
             if (linhas.length === 0) {
                 throw new Error("Nenhum resultado encontrado.");
             }
-
-            const ultimoIndice = linhas.length - 1;
-            console.log(`Quantidade de resultados: ${linhas.length}`);
-            console.log(`Clicando na última empresa (index: ${ultimoIndice})`);
-
+            const ultimoIndice = 0;
             const ultimaLinha = linhas[ultimoIndice];
+            console.log(`Quantidade de resultados: ${linhas.length}`);
+            console.log(`Clicando na última pessoa (índice ${ultimoIndice})`);
 
-            await driver.executeScript("arguments[0].scrollIntoView({ behavior: 'smooth', block: 'center' });", ultimaLinha);
-            await driver.wait(until.elementIsVisible(ultimaLinha));
-            await driver.wait(until.elementIsEnabled(ultimaLinha));
+            await driver.executeScript(`
+                const row = arguments[0];
+                const tbody = row.closest('tbody');
+                if (tbody) tbody.scrollTop = row.offsetTop;
+            `, ultimaLinha);
+
             await driver.executeScript("arguments[0].click();", ultimaLinha);
-
-            await driver.sleep(3000);
+            
+            await driver.sleep(3000); // Mantendo o sleep de segurança, se existir, logo após o clique.
 
             await ctx.parameter("Status", "200");
         } catch (erro) {
             await ctx.parameter("Status", "400");
             console.error("Erro ao clicar no último resultado:", erro);
-            await assert.fail('Erro ao clicar no último resultado: ' + erro.message);
+            assert.fail("Erro ao clicar no último resultado");
             throw erro;
         }
     });
@@ -44,7 +44,7 @@ async function FalhaAtualizarEmpresaCNPJ(driver) {
             await ctx.parameter("Status", "200");
         } catch (erro) {
             await ctx.parameter("Status", "400");
-            await CapturaTela(driver, "Erro ao marcar checkbox");
+            await tirarPrint(driver, "Erro ao marcar checkbox");
             await assert.fail('Erro ao marcar checkbox');
             throw erro;
         }
@@ -64,7 +64,7 @@ async function FalhaAtualizarEmpresaCNPJ(driver) {
             await driver.actions().sendKeys(cnpjInvalido).perform();
             
             // Tirando screenshot do campo preenchido
-            await CapturaTela(driver, "CNPJ_invalido_preenchido");
+            await tirarPrint(driver, "CNPJ_invalido_preenchido");
             
             // Clicando no botão de atualizar
             const botaoAtualizar = await driver.findElement(By.xpath("//button[contains(., 'Atualizar')]"));
@@ -90,13 +90,13 @@ async function FalhaAtualizarEmpresaCNPJ(driver) {
 
             // Verificando se as alterações não foram salvas
             await driver.sleep(1000);
-            await CapturaTela(driver, "Verificacao_alteracoes_nao_salvas");
+            await tirarPrint(driver, "Verificacao_alteracoes_nao_salvas");
 
         } catch (erro) {
             // Se cair aqui, pode ser que o alerta não apareceu (timeout) ou outro erro de execução
             await ctx.parameter("Status", "200");
             console.log("Erro capturado durante a tentativa (esperado em teste negativo):", erro.message);
-            await CapturaTela(driver, "Fluxo_interrompido_esperado");
+            await tirarPrint(driver, "Fluxo_interrompido_esperado");
         }
     });
 }

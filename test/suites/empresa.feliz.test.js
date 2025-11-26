@@ -43,7 +43,7 @@ describe("Suíte de Testes - Caminho Feliz Empresa", function () {
         await CriarEmpresaObrigatorio(driver);
     });
 
-    it.only('Deve registrar uma empresa completa', async function () {
+    it('Deve registrar uma empresa completa', async function () {
         console.log("Teste: Criar empresa completa");
         allure.parentSuite("CaminhoFeliz");
         allure.suite("TesteEmpresa");

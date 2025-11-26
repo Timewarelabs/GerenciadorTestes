@@ -2,7 +2,7 @@ import { By, Key, until } from 'selenium-webdriver';
 import * as allure from "allure-js-commons";
 import assert from 'assert';
 import { obterBaseUrl } from "../../config/global.config.js";
-import { CapturaTela } from '../../comum/captura.js';
+import { tirarPrint } from '../../comum/tirarPrint.js';
 
 async function FalhaCriarEmpresa(driver) {
     try {
@@ -16,7 +16,7 @@ async function FalhaCriarEmpresa(driver) {
                 await ctx.parameter("Status", "400");
                 console.error("Erro ao acessar a página de cadastro de empresa:", erro.message);
                 await assert.fail('Erro ao acessar página de gerenciamento');
-                await CapturaTela(driver, "Erro ao acessar a página de cadastro de empresa");
+                await tirarPrint(driver, "Erro ao acessar a página de cadastro de empresa");
                 throw erro;
             }
         });
@@ -31,7 +31,7 @@ async function FalhaCriarEmpresa(driver) {
             } catch (erro) {
                 await ctx.parameter("Status", "failed");
                 console.error("Erro ao marcar checkbox:", erro.message);
-                await CapturaTela(driver, "Erro ao marcar checkbox");
+                await tirarPrint(driver, "Erro ao marcar checkbox");
                 await assert.fail('Erro ao ativar modo manual');
                 throw new Error(`Teste falhou: ${erro.message}`);
             }
@@ -79,7 +79,7 @@ async function FalhaCriarEmpresa(driver) {
                 await ctx.parameter("Status", "200"); // 200 aqui pode significar que o teste passou pois o cadastro falhou?
                 // Atenção: Se o fluxo "explodir" antes da validação, pode ser um erro real de teste.
                 // Mas seguindo seu script original, mantive a lógica de captura.
-                await CapturaTela(driver, "Tentativa de registro falhou (Esperado)");
+                await tirarPrint(driver, "Tentativa de registro falhou (Esperado)");
             }
         });
 
@@ -96,7 +96,7 @@ async function FalhaCriarEmpresa(driver) {
 
     } catch (erro) {
         console.error("Erro inesperado no teste:", erro);
-        await CapturaTela(driver, "Erro_Geral_FalhaCriarEmpresa");
+        await tirarPrint(driver, "Erro_Geral_FalhaCriarEmpresa");
         throw erro;
     }
 }

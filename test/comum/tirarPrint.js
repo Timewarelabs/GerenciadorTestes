@@ -1,6 +1,8 @@
 import * as allure from "allure-js-commons"; 
+import { Buffer } from "buffer";
 
-async function CapturaTela(driver, EtapaNome) {
+
+async function tirarPrint (driver, EtapaNome) {
     try {
         const screenshot = await driver.takeScreenshot();
         
@@ -11,4 +13,4 @@ async function CapturaTela(driver, EtapaNome) {
     }
 }
 
-export { CapturaTela };
+export {tirarPrint};

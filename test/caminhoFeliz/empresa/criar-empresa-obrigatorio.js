@@ -2,7 +2,7 @@ import { By, Key, until } from 'selenium-webdriver';
 import * as allure from "allure-js-commons";
 import assert from 'assert';
 import { obterBaseUrl } from "../../config/global.config.js";
-import { CapturaTela } from '../../comum/captura.js';
+import { tirarPrint } from '../../comum/tirarPrint.js';
 
 async function CriarEmpresaObrigatorio(driver) {
     try {
@@ -16,7 +16,7 @@ async function CriarEmpresaObrigatorio(driver) {
                 await ctx.parameter("Status", "400");
                 console.error("Erro ao acessar a página de cadastro de empresa:", erro.message);
                 await assert.fail('Erro ao acessar página de gerenciamento');
-                await CapturaTela(driver, "Erro ao acessar a página de cadastro de empresa");
+                await tirarPrint(driver, "Erro ao acessar a página de cadastro de empresa");
                 throw erro;
             }
         });
@@ -31,7 +31,7 @@ async function CriarEmpresaObrigatorio(driver) {
             } catch (erro) {
                 await ctx.parameter("Status", "failed");
                 console.error("Erro ao marcar checkbox:", erro.message);
-                await CapturaTela(driver, "Erro ao marcar checkbox");
+                await tirarPrint(driver, "Erro ao marcar checkbox");
                 await assert.fail('Erro ao ativar modo manual');
                 throw new Error(`Teste falhou: ${erro.message}`);
             }
@@ -74,7 +74,7 @@ async function CriarEmpresaObrigatorio(driver) {
                 await ctx.parameter("Status", "400");
                 console.error("Erro ao clicar no botão de registro:", erro.message);
                 await assert.fail('Erro ao clicar no botão de registro');
-                await CapturaTela(driver, "Erro ao clicar no botão de registro");
+                await tirarPrint(driver, "Erro ao clicar no botão de registro");
                 throw erro;
             }
         });
@@ -87,14 +87,14 @@ async function CriarEmpresaObrigatorio(driver) {
                 await ctx.parameter("Status", "400");
                 await assert.fail('Erro durante a finalização ao cadastro');
                 console.error("Erro durante a finalização do cadastro:", erro.message);
-                await CapturaTela(driver, "Erro durante a finalização do cadastro");
+                await tirarPrint(driver, "Erro durante a finalização do cadastro");
                 throw erro;
             }
         });
 
     } catch (erro) {
         console.error("Erro ao tentar registrar a empresa:", erro);
-        await CapturaTela(driver, "Erro geral no cadastro");
+        await tirarPrint(driver, "Erro geral no cadastro");
         throw erro;
     }
 }

@@ -1,7 +1,7 @@
 import { By, Key, until } from 'selenium-webdriver';
 import * as allure from "allure-js-commons";
 import assert from 'assert';
-import { CapturaTela } from '../../comum/captura.js';
+import { tirarPrint } from '../../comum/tirarPrint.js';
 
 async function ExcluirEmpresa(driver) {
 
@@ -54,7 +54,7 @@ async function ExcluirEmpresa(driver) {
                     }
                 } catch (erro) {
                     await ctx.parameter("Status", "400");
-                    await CapturaTela(driver, "Erro_alerta_exclusao");
+                    await tirarPrint(driver, "Erro_alerta_exclusao");
                     assert.fail('Erro ao validar alerta de exclusão: ' + erro.message);
                 }
             });
@@ -62,7 +62,7 @@ async function ExcluirEmpresa(driver) {
         } catch (erro) {
             await ctx.parameter("Status", "400");
             console.error("Erro ao clicar em delete:", erro.message);
-            await CapturaTela(driver, "Erro_delete_empresa");
+            await tirarPrint(driver, "Erro_delete_empresa");
             throw erro;
         }
     });

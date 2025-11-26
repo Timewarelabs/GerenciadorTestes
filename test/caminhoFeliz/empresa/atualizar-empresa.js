@@ -1,126 +1,129 @@
 import { By, Key, until } from 'selenium-webdriver';
 import * as allure from "allure-js-commons";
 import assert from 'assert';
-import { CapturaTela } from '../../comum/captura.js';
+import { tirarPrint } from '../../comum/tirarPrint.js';
 
 async function AtualizarEmpresa(driver) {
 
-    await allure.step("Clicando na empresa encontrada", async (ctx) => {
+    await allure.step("Clicando na última pessoa", async (ctx) => {
         try {
-            // Agora confiamos que a Pesquisa já filtrou certo
             const linhas = await driver.findElements(By.css("table tbody tr"));
-            if (linhas.length === 0) throw new Error("Nenhum resultado.");
-            
-            const linhaAlvo = linhas[0];
-            console.log(`Clicando no registro filtrado...`);
+            if (linhas.length === 0) {
+                throw new Error("Nenhum resultado encontrado.");
+            }
+            const ultimoIndice = 0;
+            const ultimaLinha = linhas[ultimoIndice];
+            console.log(`Quantidade de resultados: ${linhas.length}`);
+            console.log(`Clicando na última pessoa (índice ${ultimoIndice})`);
 
             await driver.executeScript(`
                 const row = arguments[0];
                 const tbody = row.closest('tbody');
                 if (tbody) tbody.scrollTop = row.offsetTop;
-            `, linhaAlvo);
-            
-            await driver.sleep(500);
-            await driver.executeScript("arguments[0].click();", linhaAlvo);
+            `, ultimaLinha);
+
+            await driver.executeScript("arguments[0].click();", ultimaLinha);
 
             await ctx.parameter("Status", "200");
         } catch (erro) {
             await ctx.parameter("Status", "400");
-            console.error("Erro ao clicar na empresa:", erro);
+            console.error("Erro ao clicar no último resultado:", erro);
+            assert.fail("Erro ao clicar no último resultado");
             throw erro;
         }
     });
 
-    await allure.step("Aguardando gaveta e checkbox", async (ctx) => {
+    await allure.step("Marcando checkbox de aceite", async (ctx) => {
         try {
-            await driver.sleep(2000); // Espera animação da gaveta
-            const checkbox = await driver.wait(until.elementLocated(By.css('input[type="checkbox"]')), 10000);
-            
-            await driver.executeScript("arguments[0].scrollIntoView({ behavior: 'smooth', block: 'center' });", checkbox);
-            await driver.sleep(500);
-            await driver.executeScript("arguments[0].click();", checkbox);
-            
+            const caixaSelecao = await driver.wait(
+                until.elementLocated(By.css('input[type="checkbox"]')),
+                10000
+            );
+            await caixaSelecao.click();
             await driver.actions().sendKeys(Key.TAB, Key.ENTER).perform();
             await ctx.parameter("Status", "200");
         } catch (erro) {
-            await CapturaTela(driver, "Erro_Checkbox_Gaveta");
+            await ctx.parameter("Status", "400");
+            await tirarPrint(driver, "Erro_ao_marcar_checkbox");
+            assert.fail("Erro ao marcar checkbox");
             throw erro;
         }
     });
 
-    await allure.step("Preenchendo Razão Social", async (ctx) => {
+    await allure.step("Preenchendo o campo 'Razão social'", async (ctx) => {
         try {
             await driver.sleep(1000);
-            // Fallback simples se não achar por label
-            try {
-                const inputRazao = await driver.findElement(By.xpath("//label[contains(., 'Razão')]/following::input[1]"));
-                await inputRazao.click();
-            } catch (e) {
-                await driver.actions().sendKeys(Key.TAB).perform();
-            }
-            
-            await driver.actions().keyDown(Key.CONTROL).sendKeys('a').keyUp(Key.CONTROL).sendKeys(Key.BACK_SPACE).perform();
+            await driver.actions().sendKeys(Key.TAB, Key.TAB, Key.ENTER).perform();
             await driver.actions().sendKeys("Nova Tech Solutions Ltda").perform();
             await ctx.parameter("Status", "200");
         } catch (erro) {
-            console.warn("Erro não crítico na Razão Social:", erro.message);
+            await ctx.parameter("Status", "400");
+            console.error("Erro ao preencher o campo 'Razão social':", erro);
+            await tirarPrint(driver, "Erro_preencher_razao_social");
+            assert.fail("Erro ao preencher o campo Razão social");
+            throw erro;
         }
     });
 
     await allure.step("Alterando campo telefone", async (ctx) => {
         try {
             await driver.sleep(500);
-            console.log("Buscando campo de Telefone...");
-
-            // Busca pela Label para ser mais garantido
-            const inputTelefone = await driver.wait(
-                until.elementLocated(By.xpath("//label[contains(., 'Telefone') or contains(., 'Celular')]/following::input[1]")),
-                5000
-            );
-
-            // Scroll e Focus JS para evitar 'could not be scrolled into view'
-            await driver.executeScript("arguments[0].scrollIntoView({ behavior: 'smooth', block: 'center' });", inputTelefone);
+            await driver.actions()
+                .sendKeys(Key.TAB, Key.TAB, Key.TAB, Key.TAB, Key.TAB, Key.TAB, Key.TAB, Key.ENTER)
+                .perform();
             await driver.sleep(500);
-            await driver.executeScript("arguments[0].focus();", inputTelefone);
-            
-            // Clique normal
-            await inputTelefone.click();
-            
-            await driver.actions().keyDown(Key.CONTROL).sendKeys('a').keyUp(Key.CONTROL).sendKeys(Key.BACK_SPACE).perform();
-            await inputTelefone.sendKeys("11991234567");
-            await driver.actions().sendKeys(Key.TAB).perform();
-
+            const campoTelefone = await driver.findElement(
+                By.xpath("/html/body/div[1]/div/div/div/div[4]/div/main/div/div[1]/div/div[2]/div[1]/div[2]/div/div[2]/div[2]/div/div/input")
+            );
+            await driver.wait(until.elementIsVisible(campoTelefone), 5000);
+            await campoTelefone.click();
+            await driver.actions()
+                .sendKeys("11991234567", Key.TAB, Key.ENTER)
+                .perform();
             await ctx.parameter("Status", "200");
         } catch (erro) {
             await ctx.parameter("Status", "400");
             console.error("Erro ao atualizar telefone:", erro);
-            await CapturaTela(driver, "Erro_atualizar_telefone");
-            assert.fail(`Erro ao atualizar telefone: ${erro.message}`);
+            await tirarPrint(driver, "Erro_atualizar_telefone");
+            assert.fail("Erro ao atualizar telefone");
             throw erro;
         }
     });
 
-    await allure.step("Clicando em Atualizar", async (ctx) => {
+    await allure.step("Clicando no botão de atualizar", async (ctx) => {
         try {
-            const xpathBotao = "//button[(contains(., 'Atualizar') or contains(., 'Salvar'))]";
-            const botaoAtualizar = await driver.wait(until.elementLocated(By.xpath(xpathBotao)), 5000);
-            
-            await driver.executeScript("arguments[0].scrollIntoView({ behavior: 'smooth', block: 'center' });", botaoAtualizar);
-            await driver.executeScript("arguments[0].click();", botaoAtualizar);
+            const botaoAtualizar = await driver.findElement(
+                By.xpath("//button[contains(., 'Atualizar')]")
+            );
+            await driver.executeScript(
+                "arguments[0].scrollIntoView({ behavior: 'smooth', block: 'center' });",
+                botaoAtualizar
+            );
 
-            await driver.wait(until.elementLocated(By.css('[role="alertdialog"] span#message-id')), 10000);
-            const textoAlerta = await driver.findElement(By.css('[role="alertdialog"] span#message-id')).getText();
+            await botaoAtualizar.click();
 
-            if (textoAlerta.trim() === "Empresa alterada com sucesso!") {
-                console.log("Sucesso confirmado!");
-                await ctx.parameter("Status", "200");
-            } else {
-                await ctx.parameter("Status", "400");
-                throw new Error(`Texto do alerta não encontrado. Esperado: "Empresa alterada com sucesso!", mas encontrado: "${textoAlerta}"`);
+            await driver.sleep(1500);
+
+            await driver.wait(
+                until.elementLocated(By.css('[role="alertdialog"] span#message-id')),
+                5000
+            );
+            const textoAlerta = await driver
+                .findElement(By.css('[role="alertdialog"] span#message-id'))
+                .getText();
+
+            if (textoAlerta !== "Empresa alterada com sucesso!") {
+                throw new Error(
+                    `Esperado: "Empresa alterada com sucesso!", mas encontrado: "${textoAlerta}"`
+                );
             }
-
+            console.log("Empresa alterada com sucesso!");
+            await ctx.parameter("Status", "200");
         } catch (erro) {
-            await CapturaTela(driver, "Erro_validacao_atualizar");
+            await ctx.parameter("Status", "400");
+            console.error("Erro ao clicar em atualizar:", erro);
+            await tirarPrint(driver, "Erro_clicar_atualizar");
+            assert.fail("Erro ao clicar no botão de atualizar ou validação falhou");
             throw erro;
         }
     });
