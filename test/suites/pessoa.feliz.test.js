@@ -13,8 +13,9 @@ import { cancelarExclusaoPessoa } from '../caminhoFeliz/pessoa/cancelarExclusaoP
 import { excluirPessoa } from '../caminhoFeliz/pessoa/excluirPessoa.js'; 
 import { buscarPessoa } from '../caminhoFeliz/pessoa/buscarPessoa.js';
 
+const isRegressivo = global.__EXECUCAO_REGRESSIVA__ === true;
 
-describe("Validação de acesso ao site", function () {
+describe("Testes Caminho Feliz Pessoa", function () {
     this.timeout(60000);
     let driver;
 
@@ -23,67 +24,73 @@ describe("Validação de acesso ao site", function () {
         setupAllure();
         configurarAmbiente();
         setupExecutor();
-        limparAllureResults();
+        if (!isRegressivo) {
+            console.log("Execução MODULAR → limpando allure-results");
+            limparAllureResults();
+        }
 
         driver = await configurarDriver();
-
         await login(driver);
     });
 
     after(async function () {
         console.log("Finalizando suíte de testes...");
         if (driver) await driver.quit();
-        await enviarResultadosParaServidor();
+        
+        if (!isRegressivo) {
+            console.log("Execução MODULAR → enviando resultados");
+            await enviarResultadosParaServidor();
+        }
     });
 
     
-    it('TESTE: Deve cadastrar pessoa preenchendo apenas campos obrigatórios', async function() {
-        allure.parentSuite("FluxoFeliz");
+    it('Deve cadastrar pessoa preenchendo apenas campos obrigatórios', async function() {
+        allure.parentSuite("CaminhoFeliz");
         allure.suite("Pessoa");
         allure.subSuite("CadastroObrigatorio");
         await criarPessoaObrigatoria(driver); 
     });
 
-    it('TESTE: Deve cadastrar pessoa preenchendo todos os campos', async function() {
-        allure.parentSuite("FluxoFeliz");
+    it('Deve cadastrar pessoa preenchendo todos os campos', async function() {
+        allure.parentSuite("CaminhoFeliz");
         allure.suite("Pessoa");
         allure.subSuite("CadastroCompleto");
         await criarPessoa(driver); 
     });
         
-    it('TESTE: Deve atualizar os dados da pessoa', async function() {
-        allure.parentSuite("FluxoFeliz");
+    it('Deve atualizar os dados da pessoa', async function() {
+        allure.parentSuite("CaminhoFeliz");
         allure.suite("Pessoa");
         allure.subSuite("AtualizacaoCompleta");
         await atualizarPessoa(driver);
     });
 
-    it('TESTE: Deve atualizar apenas o nome da pessoa', async function() {
-        allure.parentSuite("FluxoFeliz");
+    it('Deve atualizar apenas o nome da pessoa', async function() {
+        allure.parentSuite("CaminhoFeliz");
         allure.suite("Pessoa");
         allure.subSuite("AtualizacaoDeNome");
         await atualizarNomePessoa(driver); 
     });
 
-    it('TESTE: Deve tentar excluir a pessoa e cancelar a operação', async function() {
-        allure.parentSuite("FluxoFeliz");
+    it('Deve tentar excluir a pessoa e cancelar a operação', async function() {
+        allure.parentSuite("CaminhoFeliz");
         allure.suite("Pessoa");
         allure.subSuite("CancelamentoDeExclusao");
         await criarPessoaObrigatoria(driver); 
         await cancelarExclusaoPessoa(driver); 
     });
 
-    it('TESTE: Deve excluir a pessoa após a confirmação', async function() {
-        allure.parentSuite("FluxoFeliz");
+    it('Deve excluir a pessoa após a confirmação', async function() {
+        allure.parentSuite("CaminhoFeliz");
         allure.suite("Pessoa");
         allure.subSuite("ExclusaoBemSucedida");
         await criarPessoaObrigatoria(driver); 
         await excluirPessoa(driver);
     });
 
-    it('TESTE: Deve buscar uma pessoa pelo nome e validar o resultado', async function () {
+    it('Deve buscar uma pessoa pelo nome e validar o resultado', async function () {
         const termoBusca = "Vinícius";
-        allure.parentSuite("FluxoFeliz");
+        allure.parentSuite("CaminhoFeliz");
         allure.suite("Pessoa");
         allure.subSuite("BuscaPorNome");
         await buscarPessoa(driver, termoBusca);

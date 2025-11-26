@@ -82,7 +82,6 @@ export function limparAllureResults() {
 
       fs.rmSync(RESULTS_DIR, { recursive: true, force: true });
 
-      // recria a pasta vazia para evitar erros no runtime do allure
       fs.mkdirSync(RESULTS_DIR);
     } else {
       console.log("Pasta allure-results não existe, nenhuma limpeza necessária.");

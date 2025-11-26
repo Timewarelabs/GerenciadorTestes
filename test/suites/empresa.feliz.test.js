@@ -13,7 +13,9 @@ import { AtualizarEmailEmpresa } from "../caminhoFeliz/empresa/atualizar-email-e
 import { ExcluirEmpresa } from "../caminhoFeliz/empresa/excluir-empresa.js";
 import { PesquisarEmpresa } from "../caminhoFeliz/empresa/pesquisar-empresa.js";
 
-describe("Suíte de Testes - Caminho Feliz Empresa", function () {
+const isRegressivo = global.__EXECUCAO_REGRESSIVA__ === true;
+
+describe("Testes Caminho Feliz Empresa", function () {
     this.timeout(1200000); // Timeout ajustado conforme seu antigo
     let driver;
 
@@ -22,17 +24,23 @@ describe("Suíte de Testes - Caminho Feliz Empresa", function () {
         setupAllure();
         configurarAmbiente();
         setupExecutor();
-        limparAllureResults();
+        if (!isRegressivo) {
+            console.log("Execução MODULAR → limpando allure-results");
+            limparAllureResults();
+        }
 
         driver = await configurarDriver();
-
         await login(driver);
     });
 
     after(async function () {
         console.log("Finalizando suíte de testes...");
         if (driver) await driver.quit();
-        await enviarResultadosParaServidor();
+        
+        if (!isRegressivo) {
+            console.log("Execução MODULAR → enviando resultados");
+            await enviarResultadosParaServidor();
+        }
     });
 
     it('Deve registrar empresa (apenas obrigatórios)', async function () {

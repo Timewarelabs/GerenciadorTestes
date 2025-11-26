@@ -13,6 +13,7 @@ import { falhaAtualizarContratoSemCamposObrigatorios } from '../caminhoTriste/co
 import { falhaAtualizarContratoNumeroInvalido } from '../caminhoTriste/contratos/falhaAtualizarContratoNumeroInvalido.js'; 
 import { falhaAtualizarContratoDataInvalida } from '../caminhoTriste/contratos/falhaAtualizarContratoDataInvalida.js'; 
 
+const isRegressivo = global.__EXECUCAO_REGRESSIVA__ === true;
 
 describe('TestesCaminhoTristeContrato', function() {
     this.timeout(60000); 
@@ -23,17 +24,23 @@ describe('TestesCaminhoTristeContrato', function() {
         setupAllure();
         configurarAmbiente();
         setupExecutor();
-        limparAllureResults();
+        if (!isRegressivo) {
+            console.log("Execução MODULAR → limpando allure-results");
+            limparAllureResults();
+        }
 
         driver = await configurarDriver();
-
         await login(driver);
     });
 
     after(async function () {
         console.log("Finalizando suíte de testes...");
         if (driver) await driver.quit();
-        await enviarResultadosParaServidor();
+        
+        if (!isRegressivo) {
+            console.log("Execução MODULAR → enviando resultados");
+            await enviarResultadosParaServidor();
+        }
     });
 
 

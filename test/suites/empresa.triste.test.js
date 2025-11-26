@@ -13,7 +13,9 @@ import { FalhaCriarEmpresa } from "../caminhoTriste/empresa/falha-criar-empresa.
 import { FalhaAtualizarEmpresaCNPJ } from "../caminhoTriste/empresa/falha-atualizar-empresa-cnpj.js";
 import { FalhaAtualizarEmpresaCaracteres } from "../caminhoTriste/empresa/falha-atualizar-empresa-caracteres.js";
 
-describe("Suíte de Testes - Caminho Triste Empresa", function () {
+const isRegressivo = global.__EXECUCAO_REGRESSIVA__ === true;
+
+describe("Testes Caminho Triste Empresa", function () {
     this.timeout(1200000);
     let driver;
 
@@ -22,7 +24,10 @@ describe("Suíte de Testes - Caminho Triste Empresa", function () {
         setupAllure();
         configurarAmbiente();
         setupExecutor();
-        limparAllureResults();
+        if (!isRegressivo) {
+            console.log("Execução MODULAR → limpando allure-results");
+            limparAllureResults();
+        }
 
         driver = await configurarDriver();
         await login(driver);
@@ -31,7 +36,11 @@ describe("Suíte de Testes - Caminho Triste Empresa", function () {
     after(async function () {
         console.log("Finalizando suíte de testes...");
         if (driver) await driver.quit();
-        await enviarResultadosParaServidor();
+        
+        if (!isRegressivo) {
+            console.log("Execução MODULAR → enviando resultados");
+            await enviarResultadosParaServidor();
+        }
     });
 
     it('Deve falhar ao registrar empresa (campos obrigatórios)', async function () {
