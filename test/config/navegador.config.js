@@ -20,6 +20,8 @@ export async function configurarDriver() {
             opcoesChrome.addArguments("--disable-gpu");           
             opcoesChrome.addArguments("--no-sandbox");            
             opcoesChrome.addArguments("--disable-dev-shm-usage"); 
+            opcoesChrome.addArguments("--incognito");
+            //opcoesChrome.addArguments("--headless=new");
 
             driver = await new Builder()
                 .forBrowser("chrome")

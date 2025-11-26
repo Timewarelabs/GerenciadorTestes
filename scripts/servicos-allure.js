@@ -74,3 +74,19 @@ export async function enviarResultadosParaServidor() {
     console.error("Falha ao enviar resultados:", err.message);
   }
 }
+
+export function limparAllureResults() {
+  try {
+    if (fs.existsSync(RESULTS_DIR)) {
+      console.log("Limpando pasta local allure-results...");
+
+      fs.rmSync(RESULTS_DIR, { recursive: true, force: true });
+
+      fs.mkdirSync(RESULTS_DIR);
+    } else {
+      console.log("Pasta allure-results não existe, nenhuma limpeza necessária.");
+    }
+  } catch (error) {
+    console.error("Erro ao limpar pasta allure-results:", error.message);
+  }
+}

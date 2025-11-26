@@ -1,7 +1,24 @@
-import "./suites/suite.template.test.js";
+import { limparAllureResults, enviarResultadosParaServidor } from "../scripts/servicos-allure.js";
 
-describe("Execução completa do template de automação", function () {
-  it("Executando todas as suítes de teste disponíveis", function () {
-    console.log("Iniciando execução completa do template...");
-  });
+global.__EXECUCAO_REGRESSIVA__ = true;
+
+before(async () => {
+  console.log("Execução Regressiva → limpando allure-results");
+  await limparAllureResults();
+});
+
+await import("./suites/contrato.feliz.test.js");
+await import("./suites/contrato.triste.test.js");
+await import("./suites/empresa.feliz.test.js");
+await import("./suites/empresa.triste.test.js");
+await import("./suites/pessoa.feliz.test.js");
+await import("./suites/pessoa.triste.test.js");
+
+after(async () => {
+  try {
+    console.log("Execução Regressiva → enviando resultados");
+    enviarResultadosParaServidor();
+  } catch (e) {
+    console.log("Erro ao enviar resultados para o servidor.");
+  }
 });
