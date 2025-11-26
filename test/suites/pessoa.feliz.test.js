@@ -3,7 +3,7 @@ import { configurarDriver } from "../config/navegador.config.js";
 import { configurarAmbiente } from "../config/ambienteAllure.js";
 import { setupExecutor } from "../config/executor.js";
 import { login } from "../comum/login.js"; 
-import { setupAllure, enviarResultadosParaServidor } from "../../scripts/servicos-allure.js";
+import { setupAllure, enviarResultadosParaServidor, limparAllureResults } from "../../scripts/servicos-allure.js";
 
 import { criarPessoaObrigatoria } from '../caminhoFeliz/pessoa/criarPessoaObrigatorio.js';
 import { criarPessoa } from '../caminhoFeliz/pessoa/criarPessoa.js'; 
@@ -23,6 +23,7 @@ describe("Validação de acesso ao site", function () {
         setupAllure();
         configurarAmbiente();
         setupExecutor();
+        limparAllureResults();
 
         driver = await configurarDriver();
 

@@ -3,7 +3,7 @@ import { configurarDriver } from "../config/navegador.config.js";
 import { configurarAmbiente } from "../config/ambienteAllure.js";
 import { setupExecutor } from "../config/executor.js";
 import { login } from "../comum/login.js";
-import { setupAllure, enviarResultadosParaServidor } from "../../scripts/servicos-allure.js";
+import { setupAllure, enviarResultadosParaServidor, limparAllureResults } from "../../scripts/servicos-allure.js";
 
 
 import { falhaCriarContratoComCamposVazios } from '../caminhoTriste/contratos/falhaCriarContratoComCamposVazios.js';
@@ -23,6 +23,7 @@ describe('TestesCaminhoTristeContrato', function() {
         setupAllure();
         configurarAmbiente();
         setupExecutor();
+        limparAllureResults();
 
         driver = await configurarDriver();
 

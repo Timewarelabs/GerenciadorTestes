@@ -2,7 +2,7 @@ import * as allure from "allure-js-commons";
 import { configurarDriver } from "../config/navegador.config.js";
 import { configurarAmbiente } from "../config/ambienteAllure.js";
 import { setupExecutor } from "../config/executor.js";
-import { setupAllure, enviarResultadosParaServidor } from "../../scripts/servicos-allure.js";
+import { setupAllure, enviarResultadosParaServidor, limparAllureResults } from "../../scripts/servicos-allure.js";
 import { login } from "../comum/login.js";
 
 // Importando cenários (Caminho Feliz - necessário para setup/pesquisa)
@@ -22,6 +22,7 @@ describe("Suíte de Testes - Caminho Triste Empresa", function () {
         setupAllure();
         configurarAmbiente();
         setupExecutor();
+        limparAllureResults
 
         driver = await configurarDriver();
         await login(driver);
