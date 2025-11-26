@@ -22,7 +22,7 @@ describe("Suíte de Testes - Caminho Triste Empresa", function () {
         setupAllure();
         configurarAmbiente();
         setupExecutor();
-        limparAllureResults
+        limparAllureResults();
 
         driver = await configurarDriver();
         await login(driver);

@@ -22,7 +22,7 @@ describe("Suíte de Testes - Caminho Feliz Empresa", function () {
         setupAllure();
         configurarAmbiente();
         setupExecutor();
-        limparAllureResults
+        limparAllureResults();
 
         driver = await configurarDriver();
 
