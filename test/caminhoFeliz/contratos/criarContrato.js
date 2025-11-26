@@ -23,11 +23,11 @@ async function criarContrato(driver) {
 
         let campos = ['Título', 'Objeto', 'Número', 'Unidade de negócio', 'Data de assinatura', 
                         'Início da vigência', 'Data de extinção', 'Término da vigência', 
-                        'Valor', 'Índice de reajuste', 'Pasta', 'Responsável', 'Observação'];
+                        'Valor', 'Índice de reajuste', 'Pasta', 'Responsável'];
         
         let valores = ['Contrato de Teste Automatizado', 'teste', '1234', '42', '01012025',
                         '02022025', '03032025', '09092025', '11111', '',
-                        '', 'carol', 'nenhuma'];
+                        '', 'carol'];
 
 
         await allure.step("Preenchendo o campo Título", async () => {

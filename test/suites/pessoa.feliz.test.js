@@ -81,7 +81,6 @@ describe("Validação de acesso ao site", function () {
     });
 
     it('TESTE: Deve buscar uma pessoa pelo nome e validar o resultado', async function () {
-        if(!loginSucesso) return;
         const termoBusca = "Vinícius";
         allure.parentSuite("FluxoFeliz");
         allure.suite("Pessoa");

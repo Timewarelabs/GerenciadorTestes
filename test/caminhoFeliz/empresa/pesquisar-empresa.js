@@ -1,7 +1,7 @@
 import { By, until, Key } from 'selenium-webdriver';
 import * as allure from "allure-js-commons";
-import fs from 'fs';
 import assert from 'assert';
+import { tirarPrint } from "../../comum/tirarPrint.js"; 
 import { obterBaseUrl } from "../../config/global.config.js";
 
 async function PesquisarEmpresa(driver, termo) {
@@ -92,9 +92,7 @@ async function PesquisarEmpresa(driver, termo) {
             console.log(`Linhas visíveis após filtro: ${resultados.length}`);
             
             // Screenshot para evidência
-            const captura = await driver.takeScreenshot();
-            if (!fs.existsSync('screenshots')) fs.mkdirSync('screenshots');
-            fs.writeFileSync(`screenshots/resultado-pesquisa.png`, captura, 'base64');
+            const captura = await tirarPrint(driver, "Evidencia");
             allure.attachment("Resultado da Pesquisa", Buffer.from(captura, 'base64'), 'image/png');
 
             await ctx.parameter("Resultados", `Visíveis: ${resultados.length}`);
@@ -102,6 +100,7 @@ async function PesquisarEmpresa(driver, termo) {
 
     } catch (erro) {
         console.error("Erro no processo de busca:", erro);
+        await tirarPrint(driver, "Erro na pesquisa de empresa");
         throw erro;
     }
 }
