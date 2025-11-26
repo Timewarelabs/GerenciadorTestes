@@ -91,9 +91,8 @@ async function PesquisarEmpresa(driver, termo) {
             const resultados = await driver.findElements(By.css("table tbody tr"));
             console.log(`Linhas visíveis após filtro: ${resultados.length}`);
             
-            // Screenshot para evidência
-            const captura = await tirarPrint(driver, "Evidencia");
-            allure.attachment("Resultado da Pesquisa", Buffer.from(captura, 'base64'), 'image/png');
+            // Screenshot para evidência - A função tirarPrint agora anexa o screenshot diretamente ao Allure
+            await tirarPrint(driver, "Evidencia");
 
             await ctx.parameter("Resultados", `Visíveis: ${resultados.length}`);
         });

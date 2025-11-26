@@ -72,6 +72,8 @@ async function CriarEmpresa(driver) {
                 
                 // 2. Tenta sair do campo (Primeiro TAB)
                 await driver.actions().sendKeys(Key.TAB).perform();
+                await driver.actions().sendKeys(Key.SHIFT-TAB).perform();
+                
 
                 // --- INÍCIO DA ALTERAÇÃO SOLICITADA ---
                 
