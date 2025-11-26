@@ -21,7 +21,7 @@ export async function configurarDriver() {
             opcoesChrome.addArguments("--no-sandbox");            
             opcoesChrome.addArguments("--disable-dev-shm-usage"); 
             opcoesChrome.addArguments("--incognito");
-            //opcoesChrome.addArguments("--headless=new");
+            opcoesChrome.addArguments("--headless=new");
 
             driver = await new Builder()
                 .forBrowser("chrome")
@@ -35,23 +35,27 @@ export async function configurarDriver() {
             opcoesFirefox.setAcceptInsecureCerts(true);                  
             opcoesFirefox.setPreference("network.cookie.cookieBehavior", 0); 
 
-            const caminhoGeckoDriver = path.join(process.cwd(), "drivers", "geckodriver.exe");
             let servicoGecko;
 
-            if (fs.existsSync(caminhoGeckoDriver)) {
-                servicoGecko = new FirefoxServiceBuilder(caminhoGeckoDriver);
-            } else {
-                console.warn(`AVISO: GeckoDriver não encontrado em ${caminhoGeckoDriver}. Usando ServiceBuilder padrão.`);
-                servicoGecko = new FirefoxServiceBuilder();
-            }
+            const isWindows = process.platform === "win32";
 
+            if (isWindows) {
+                const caminhoWindows = path.join(process.cwd(), "drivers", "geckodriver.exe");
+
+                if (fs.existsSync(caminhoWindows)) {
+                    console.log("Usando GeckoDriver local (Windows):", caminhoWindows);
+                    servicoGecko = new FirefoxServiceBuilder(caminhoWindows);
+                } else {
+                    console.warn(`GeckoDriver não encontrado em ${caminhoWindows}. Usando ServiceBuilder padrão.`);
+                    servicoGecko = new FirefoxServiceBuilder();
+                }
+            } else {
+                console.log("Usando GeckoDriver padrão do sistema (Linux/Docker).");
+                servicoGecko = new FirefoxServiceBuilder("/usr/local/bin/geckodriver");
+            }
             let builderFirefox = new Builder()
                 .forBrowser("firefox")
                 .setFirefoxOptions(opcoesFirefox);
-
-            if (servicoGecko) {
-                builderFirefox = builderFirefox.setFirefoxService(servicoGecko);
-            }
 
             driver = await builderFirefox.build();
             break;

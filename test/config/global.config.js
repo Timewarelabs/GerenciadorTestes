@@ -51,6 +51,6 @@ export function obterBaseUrl() {
     ? "https://aaspgerenciador.aasp.org.br" 
     : ambiente === "homolog" 
     ? "https://aaspgerenciador.homolog.aasp.org.br" 
-    : "http://localhost:3000"; 
+    : "http://host.docker.internal:3000"; 
 
 }

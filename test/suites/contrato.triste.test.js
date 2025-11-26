@@ -15,7 +15,7 @@ import { falhaAtualizarContratoDataInvalida } from '../caminhoTriste/contratos/f
 
 const isRegressivo = global.__EXECUCAO_REGRESSIVA__ === true;
 
-describe('TestesCaminhoTristeContrato', function() {
+describe('Testes Caminho Triste Contrato', function() {
     this.timeout(60000); 
     let driver;
 
