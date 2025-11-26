@@ -1,16 +1,14 @@
-import * as allure from "allure-js-commons"; 
+import * as allure from "allure-js-commons";
 import { Buffer } from "buffer";
 
-
-async function tirarPrint (driver, EtapaNome) {
+async function tirarPrint(driver, stepName) {
     try {
         const screenshot = await driver.takeScreenshot();
-        
-        allure.attachment(`${EtapaNome}.png`, Buffer.from(screenshot, 'base64'), 'image/png');
-        console.log(`Tela capturada: ${EtapaNome}`);
+        allure.attachment(`${stepName}.png`, Buffer.from(screenshot, 'base64'), 'image/png');
+        console.log(`Screenshot capturada para o passo: ${stepName}`);
     } catch (screenshotError) {
-        console.error('Erro ao capturar tela:', screenshotError.message);
+        console.error('Erro ao capturar screenshot:', screenshotError.message);
     }
 }
 
-export {tirarPrint};
+export { tirarPrint };

@@ -47,8 +47,10 @@ export function obterBaseUrl() {
   const ambiente = obterAmbienteAtual();
 
   return ambiente === "prod"
+
     ? "https://aaspgerenciador.aasp.org.br" 
     : ambiente === "homolog" 
     ? "https://aaspgerenciador.homolog.aasp.org.br" 
     : "http://localhost:3000"; 
+
 }
