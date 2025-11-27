@@ -6,20 +6,20 @@ let url;
 
 switch (arg) {
     case "imediato":
-        url = "http://host.docker.internal:5050/allure-docker-service/projects/testes-imediato/reports/latest/index.html";
+        url = "http://localhost:5050/allure-docker-service/projects/testes-imediato/reports/latest/index.html";
         break;
     case "historico":
-        url = "http://host.docker.internal:5050/allure-docker-service/projects/testes-historico/reports/latest/index.html";
+        url = "http://localhost:5050/allure-docker-service/projects/testes-historico/reports/latest/index.html";
         break;
     case "dash":
     case undefined: 
-        url = "http://host.docker.internal:5252";
+        url = "http://localhost:5252";
         break;
     case "api":
-        url = "http://host.docker.internal:5050";
+        url = "http://localhost:5050";
         break;
     default:
-        console.error("Parâmetro inválido! Use: dash | imediato | historico");
+        console.error("Parâmetro inválido! Use: dash | imediato | historico | api");
         process.exit(1);
 }
 
