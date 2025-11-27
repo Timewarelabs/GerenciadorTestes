@@ -8,27 +8,34 @@ import { ExcluirEmpresa } from './excluir-empresa.js';
 
 async function CriarEmpresa(driver) {
     const cnpjAlvo = "46.295.498/0001-68";
+    const fraseObservacao = "isso é uma observação de teste";
+
+    async function performShiftTab(driver) {
+        await driver.actions()
+            .keyDown(Key.SHIFT)
+            .sendKeys(Key.TAB)
+            .keyUp(Key.SHIFT)
+            .perform();
+        await driver.sleep(200);
+    }
 
     try {
-        console.log("Iniciando fluxo de criação de empresa (com verificação de limpeza)...");
         await allure.step(`Verificação Prévia: Buscando se CNPJ ${cnpjAlvo} já existe`, async (ctx) => {
             try {
                 await PesquisarEmpresa(driver, cnpjAlvo);
 
                 const linhas = await driver.findElements(By.css("table tbody tr"));
-                
-                if (linhas.length > 0) {
+
+                if (linhas.length > 1) {
                     const textoLinha = await linhas[0].getText();
-                    
+
                     if (textoLinha.trim() !== "" && !textoLinha.includes("Nenhum registro")) {
-                        console.log(`Registro prévio encontrado para ${cnpjAlvo}. Executando exclusão...`);
                         await ctx.parameter("Ação", "Registro encontrado - Deletando");
-                        
+
                         await ExcluirEmpresa(driver);
-                        
+
                         await driver.sleep(2000);
                     } else {
-                        console.log("Tabela vazia ou sem resultados relevantes.");
                         await ctx.parameter("Ação", "Nenhum registro real encontrado");
                     }
                 }
@@ -54,7 +61,11 @@ async function CriarEmpresa(driver) {
             try {
                 await driver.wait(until.elementLocated(By.css('input[type="checkbox"]')), 10000);
                 await driver.findElement(By.css('input[type="checkbox"]')).click();
+
+                console.log("Ação: Marcando checkbox. Enviando TAB, TAB, ENTER.");
                 await driver.actions().sendKeys(Key.TAB, Key.TAB, Key.ENTER).perform();
+                await driver.sleep(1500); // Pausa
+
                 await ctx.parameter("Status", "200");
             } catch (erro) {
                 await ctx.parameter("Status", "400");
@@ -64,26 +75,40 @@ async function CriarEmpresa(driver) {
             }
         });
 
-        await allure.step("Preenchendo os dados da empresa", async (ctx) => {
+        await allure.step("Preenchendo dados iniciais e navegando condicionalmente", async (ctx) => {
             try {
-                // 1. Pressiona TAB e digita o CNPJ
                 await driver.actions().sendKeys(Key.TAB, cnpjAlvo).perform();
-                await driver.sleep(2000); 
-                
-                // 2. Tenta sair do campo (Primeiro TAB)
-                await driver.actions().sendKeys(Key.TAB).perform();
-                await driver.actions().sendKeys(Key.SHIFT-TAB).perform();
-                
-
-                // --- INÍCIO DA ALTERAÇÃO SOLICITADA ---
-                
-                // 3. Volta a focar o campo do CNPJ (o primeiro input de texto/tel)
-              
-               
-
-                // --- FIM DA ALTERAÇÃO SOLICITADA ---
-                
                 await driver.sleep(2000);
+
+                await driver.actions().sendKeys(Key.TAB).perform();
+                await driver.sleep(1500); 
+
+                const inputFocadoAposTab = await driver.switchTo().activeElement();
+                await inputFocadoAposTab.sendKeys(fraseObservacao);
+                await driver.sleep(1500); 
+                for (let i = 0; i < 6; i++) {
+                    await performShiftTab(driver);
+                }
+
+                const activeElement = await driver.switchTo().activeElement();
+                const elementValue = await activeElement.getAttribute('value');
+
+                if (elementValue && elementValue.trim() !== '') {
+                    await driver.actions().sendKeys(
+                        Key.TAB, Key.TAB, Key.TAB, Key.TAB, Key.TAB, Key.TAB, Key.TAB
+                    ).perform();
+                } else {
+                 
+                    await performShiftTab(driver);
+                    await driver.actions().sendKeys(cnpjAlvo).perform();
+                    await driver.sleep(1500);
+
+                    await driver.actions().sendKeys(
+                        Key.TAB, Key.TAB, Key.TAB, Key.TAB
+                    ).perform();
+                }
+
+                await driver.sleep(1500); 
                 await ctx.parameter("Status", "200");
             } catch (erro) {
                 await ctx.parameter("Status", "400");
@@ -92,60 +117,86 @@ async function CriarEmpresa(driver) {
                 throw erro;
             }
         });
-        
+
         await allure.step("Preenchendo Contato", async (ctx) => {
             try {
                 await driver.sleep(2000);
-                await driver.actions().sendKeys(Key.TAB, Key.ENTER, Key.TAB).perform();
-                await driver.sleep(500);
-                await driver.actions().sendKeys("Contato Teste", Key.ENTER, Key.TAB).perform();
-                await driver.sleep(500);
-                await driver.actions().sendKeys("11912345678" , Key.ENTER, Key.TAB).perform();
-                await driver.sleep(500);
-                await driver.actions().sendKeys("teste123@gmail.com", Key.ENTER, Key.TAB).perform();
-                await driver.sleep(500);
-                await driver.actions().sendKeys("Nenhuma observação", Key.ENTER, Key.TAB, Key.ENTER).perform();
-                await driver.sleep(500);
-                await driver.actions().sendKeys( Key.TAB,Key.TAB,Key.TAB,Key.TAB, Key.TAB, Key.TAB, Key.ENTER).perform();
 
+                await driver.actions().sendKeys(Key.TAB, Key.ENTER).perform();
+                await driver.sleep(2000); 
+                await driver.actions().sendKeys(Key.TAB).perform();
+                await driver.sleep(1500);
+                await driver.actions().sendKeys("Contato Teste", Key.TAB).perform(); 
+                await driver.sleep(1500);
+
+                await driver.actions().sendKeys("11912345678", Key.TAB).perform(); 
+                await driver.sleep(1500);
+
+                await driver.actions().sendKeys("teste123@gmail.com", Key.TAB).perform(); 
+                await driver.sleep(1500);
+
+             
+                await driver.actions().sendKeys("Nenhuma observação").perform();
+                await driver.sleep(1500);
+
+          
+                await driver.actions().sendKeys(Key.TAB, Key.ENTER,).perform();
+                await driver.actions().sendKeys(Key.TAB, Key.TAB, Key.TAB, Key.TAB,).perform();
+                await driver.sleep(1000); // Pausa para foco
+
+                const activeElement = await driver.switchTo().activeElement();
+
+                const elementHtml = await activeElement.getAttribute('innerHTML').catch(() => "");
+
+
+                const isSaveButton = elementHtml.includes('Salvar') || elementHtml.includes('Adicionar') || elementHtml.includes('Gravar');
+
+                if (isSaveButton) {
+                    await driver.actions().sendKeys(Key.ENTER).perform(); 
+                } else {
+                    await driver.actions().sendKeys(Key.TAB, Key.TAB, Key.ENTER).perform();
+                }
+                await driver.sleep(3000); 
+                await ctx.parameter("Status", "200");
             } catch (erro) {
                 await ctx.parameter("Status", "400");
                 await assert.fail('Erro ao preencher contatos');
                 throw erro;
             }
         });
-      
+
         await allure.step("Verificando sucesso do cadastro", async (ctx) => {
             try {
-                await driver.sleep(3000);
-                await driver.wait(until.elementLocated(By.css('span#message-id')));
-                const mensagem = await driver.findElement(By.css('span#message-id'));
+                const mensagem = await driver.wait(
+                    until.elementLocated(By.css('span#message-id')),
+                    20000,
+                    "Timeout ao esperar a mensagem de sucesso após o cadastro."
+                );
+
                 const textoMensagem = await mensagem.getText();
-                console.log(mensagem);
 
                 if (textoMensagem === "Erro ao incluir empresa") {
-                    console.log("Erro ao incluir empresa, encerrando função.");
                     return;
                 }
                 assert.strictEqual(textoMensagem, 'Empresa incluída com sucesso!', 'Mensagem de sucesso não encontrada');
-                
+
                 await ctx.parameter("Status", "200");
             } catch (erro) {
                 await ctx.parameter("Status", "400");
-                
+
                 let elementosErro = await driver.findElements(By.css(".jss1484 h6"));
                 if (elementosErro.length > 0) {
                     let mensagemErro = await elementosErro[0].getText();
-                    
+
                     if (mensagemErro.includes("Houve um problema")) {
                         console.error(`Erro no cadastro detectado: ${mensagemErro}`);
                         await tirarPrint(driver, `Erro no cadastro - ${mensagemErro}`);
-                        
+
                         let elementosDetalhe = await driver.findElements(By.css(".jss1521 p"));
                         if (elementosDetalhe.length > 0) {
                             let mensagemDetalhe = await elementosDetalhe[0].getText();
                             console.error(`Detalhe do erro: ${mensagemDetalhe}`);
-                        
+
                             assert.fail(`Erro no cadastro detectado: ${mensagemErro} - ${mensagemDetalhe}`);
                         } else {
                             await assert.fail('Alerta de sucesso não econtrado');
@@ -153,7 +204,7 @@ async function CriarEmpresa(driver) {
                         }
                     }
                 }
-                
+
                 await tirarPrint(driver, "Erro ao verificar sucesso do cadastro");
                 throw erro;
             }

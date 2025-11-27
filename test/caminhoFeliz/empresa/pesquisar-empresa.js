@@ -53,6 +53,8 @@ async function PesquisarEmpresa(driver, termo) {
             // Limpa antes de digitar para garantir
             await barraPesquisa.sendKeys(Key.CONTROL, "a", Key.DELETE); 
             await barraPesquisa.sendKeys(termo, Key.ENTER);
+               await driver.sleep(1000);
+            await barraPesquisa.sendKeys(Key.ENTER);
             console.log('Termo enviado, aguardando filtro...');
             
             // --- CORREÇÃO CRÍTICA: ESPERAR O FILTRO ACONTECER ---
@@ -60,7 +62,7 @@ async function PesquisarEmpresa(driver, termo) {
                 await driver.wait(async () => {
                     const linhas = await driver.findElements(By.css("table tbody tr"));
                     // Se não tiver linhas, continua esperando
-                    if (linhas.length === 0) return false;
+                    if (linhas.length === 1) return false;
                     
                     // Pega o texto da primeira linha para ver se bate com a pesquisa
                     const textoLinha = await linhas[0].getText();
