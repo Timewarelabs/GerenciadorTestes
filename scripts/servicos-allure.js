@@ -5,7 +5,7 @@ import FormData from "form-data";
 
 const ALLURE_MODE = process.env.ALLURE_MODE || "server";
 const RESULTS_DIR = path.join(process.cwd(), "allure-results");
-const ALLURE_SERVER_URL = process.env.ALLURE_SERVER_URL || "http://host.docker.internal:5050";
+const ALLURE_SERVER_URL = process.env.ALLURE_SERVER_URL || "http://localhost:5050";
 
 const PROJECT_IMEDIATO = "testes-imediato";
 const PROJECT_HISTORICO = "testes-historico";
@@ -29,6 +29,7 @@ async function enviarArquivosAllure(projectId, limparAntes = false) {
   if (limparAntes) {
     console.log(`Limpando resultados anteriores do projeto '${projectId}'...`);
     try {
+      await axios.get(`${ALLURE_SERVER_URL}/allure-docker-service/clean-results?project_id=${projectId}`);
       await axios.get(`${ALLURE_SERVER_URL}/allure-docker-service/clean-history?project_id=${projectId}`);
     } catch {
       console.warn(`Falha ao limpar resultados do projeto '${projectId}'.`);
