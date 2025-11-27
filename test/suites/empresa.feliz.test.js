@@ -61,9 +61,9 @@ describe("Testes Caminho Feliz Empresa", function () {
         await CriarEmpresa(driver);
     });
 
-    it('Deve atualizar dados da empresa', async function () {
+    it.only('Deve atualizar dados da empresa', async function () {
         console.log("Teste: Atualizar empresa");
-        const cnpjPesquisa = "46.295.498/0001-68";
+        const cnpjPesquisa = "51.690.476/0001-32";
         
         allure.parentSuite("CaminhoFeliz");
         allure.suite("TesteEmpresa");
@@ -73,9 +73,9 @@ describe("Testes Caminho Feliz Empresa", function () {
         await AtualizarEmpresa(driver);
     });
 
-    it('Deve atualizar e-mail da empresa', async function () {
+    it.only('Deve atualizar e-mail da empresa', async function () {
         console.log("Teste: Atualizar e-mail da empresa");
-        const cnpjPesquisa = "46.295.498/0001-68";
+        const cnpjPesquisa = "51.690.476/0001-32";
         
         allure.parentSuite("CaminhoFeliz");
         allure.suite("TesteEmpresa");

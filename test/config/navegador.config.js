@@ -21,7 +21,7 @@ export async function configurarDriver() {
             opcoesChrome.addArguments("--no-sandbox");            
             opcoesChrome.addArguments("--disable-dev-shm-usage"); 
             opcoesChrome.addArguments("--incognito");
-            opcoesChrome.addArguments("--headless=new");
+            // opcoesChrome.addArguments("--headless=new");
 
             driver = await new Builder()
                 .forBrowser("chrome")
@@ -56,6 +56,11 @@ export async function configurarDriver() {
             let builderFirefox = new Builder()
                 .forBrowser("firefox")
                 .setFirefoxOptions(opcoesFirefox);
+
+                
+            if (servicoGecko) {
+                builderFirefox = builderFirefox.setFirefoxService(servicoGecko);
+            }
 
             driver = await builderFirefox.build();
             break;
