@@ -8,7 +8,7 @@ async function AtualizarEmpresa(driver) {
     await allure.step("Clicando na última pessoa", async (ctx) => {
         try {
             const linhas = await driver.findElements(By.css("table tbody tr"));
-            if (linhas.length === 0) {
+            if (linhas.length === 1) {
                 throw new Error("Nenhum resultado encontrado.");
             }
             const ultimoIndice = 0;

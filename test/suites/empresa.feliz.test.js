@@ -61,7 +61,7 @@ describe("Testes Caminho Feliz Empresa", function () {
         await CriarEmpresa(driver);
     });
 
-    it.only('Deve atualizar dados da empresa', async function () {
+    it('Deve atualizar dados da empresa', async function () {
         console.log("Teste: Atualizar empresa");
         const cnpjPesquisa = "51.690.476/0001-32";
         
@@ -73,7 +73,7 @@ describe("Testes Caminho Feliz Empresa", function () {
         await AtualizarEmpresa(driver);
     });
 
-    it.only('Deve atualizar e-mail da empresa', async function () {
+    it('Deve atualizar e-mail da empresa', async function () {
         console.log("Teste: Atualizar e-mail da empresa");
         const cnpjPesquisa = "51.690.476/0001-32";
         
