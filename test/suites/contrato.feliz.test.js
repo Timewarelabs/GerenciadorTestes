@@ -50,42 +50,42 @@ describe('Testes Caminho Feliz Contrato', function() {
     });
 
 
-    it('TESTE: Deve cadastrar um contrato completo', async function() {
+    it('Deve cadastrar um contrato completo', async function() {
         allure.parentSuite("CaminhoFeliz");
         allure.suite("Contrato");
         allure.subSuite("CadastroCompleto");
         await criarContrato(driver);
     });
 
-    it('TESTE: Deve cadastrar contrato apenas com campos obrigatórios', async function() {
+    it('Deve cadastrar contrato apenas com campos obrigatórios', async function() {
         allure.parentSuite("CaminhoFeliz");
         allure.suite("Contrato");
         allure.subSuite("CadastroObrigatorio");
         await criarContratoObrigatorio(driver);
     });
 
-    it('TESTE: Deve buscar um contrato pelo nome', async function() {
+    it('Deve buscar um contrato pelo nome', async function() {
         allure.parentSuite("CaminhoFeliz");
         allure.suite("Contrato");
         allure.subSuite("BuscaPorNome");
         await buscarContrato(driver);
     });
 
-    it('TESTE: Deve atualizar um contrato', async function() {
+    it('Deve atualizar um contrato', async function() {
         allure.parentSuite("CaminhoFeliz");
         allure.suite("Contrato");
         allure.subSuite("AtualizacaoCompleta");
         await atualizarContrato(driver);
     });
 
-    it('TESTE: Deve atualizar o objeto do contrato', async function() {
+    it('Deve atualizar o objeto do contrato', async function() {
         allure.parentSuite("CaminhoFeliz");
         allure.suite("Contrato");
         allure.subSuite("AtualizacaoObjeto");
         await atualizarObjContrato(driver);
     });
 
-    it('TESTE: Deve excluir um contrato', async function() {
+    it('Deve excluir um contrato', async function() {
         allure.parentSuite("CaminhoFeliz");
         allure.suite("Contrato");
         allure.subSuite("Exclusao");
@@ -93,28 +93,28 @@ describe('Testes Caminho Feliz Contrato', function() {
     });
 
 
-    it('TESTE: Deve criar um aditivo', async function() {
+    it('Deve criar um aditivo', async function() {
         allure.parentSuite("CaminhoFeliz");
         allure.suite("Contrato");
         allure.subSuite("AditivoCriacao");
         await criarAditivo(driver);
     });
 
-    it('TESTE: Deve atualizar um aditivo', async function() {
+    it('Deve atualizar um aditivo', async function() {
         allure.parentSuite("CaminhoFeliz");
         allure.suite("Contrato");
         allure.subSuite("AditivoAtualizacao");
         await atualizarAditivo(driver);
     });
 
-    it('TESTE: Deve atualizar o objeto do aditivo', async function() {
+    it('Deve atualizar o objeto do aditivo', async function() {
         allure.parentSuite("CaminhoFeliz");
         allure.suite("Contrato");
         allure.subSuite("AditivoAtualizacaoObjeto");
         await atualizarObjAditivo(driver);
     });
 
-    it('TESTE: Deve excluir um aditivo', async function() {
+    it('Deve excluir um aditivo', async function() {
         allure.parentSuite("CaminhoFeliz");
         allure.suite("Contrato");
         allure.subSuite("AditivoExclusao");
@@ -122,7 +122,7 @@ describe('Testes Caminho Feliz Contrato', function() {
         await excluirAditivo(driver);
     });
 
-    it('TESTE: Deve visualizar/ler um aditivo', async function() {
+    it('Deve visualizar/ler um aditivo', async function() {
         allure.parentSuite("CaminhoFeliz");
         allure.suite("Contrato");
         allure.subSuite("AditivoLeitura");

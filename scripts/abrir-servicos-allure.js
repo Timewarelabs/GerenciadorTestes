@@ -19,7 +19,7 @@ switch (arg) {
         url = "http://localhost:5050";
         break;
     default:
-        console.error("Parâmetro inválido! Use: dash | imediato | historico");
+        console.error("Parâmetro inválido! Use: dash | imediato | historico | api");
         process.exit(1);
 }
 
