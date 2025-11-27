@@ -30,6 +30,7 @@ async function enviarArquivosAllure(projectId, limparAntes = false) {
     console.log(`Limpando resultados anteriores do projeto '${projectId}'...`);
     try {
       await axios.get(`${ALLURE_SERVER_URL}/allure-docker-service/clean-history?project_id=${projectId}`);
+      await axios.get(`${ALLURE_SERVER_URL}/allure-docker-service/clean-history?project_id=${projectId}`);
     } catch {
       console.warn(`Falha ao limpar resultados do projeto '${projectId}'.`);
     }
