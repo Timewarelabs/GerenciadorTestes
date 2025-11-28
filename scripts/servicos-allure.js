@@ -5,7 +5,7 @@ import FormData from "form-data";
 
 const ALLURE_MODE = process.env.ALLURE_MODE || "server";
 const RESULTS_DIR = path.join(process.cwd(), "allure-results");
-const ALLURE_SERVER_URL = process.env.ALLURE_SERVER_URL || "http://host.docker.internal:5050";
+const ALLURE_SERVER_URL = process.env.ALLURE_SERVER_URL || "https://api-testes.grayfield-126a3c87.brazilsouth.azurecontainerapps.io";
 
 const PROJECT_IMEDIATO = "testes-imediato";
 const PROJECT_HISTORICO = "testes-historico";
