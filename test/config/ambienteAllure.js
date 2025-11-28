@@ -6,7 +6,7 @@ function configurarAmbiente() {
     "Navegador": process.env.BROWSER || "Chrome",
     "Node": process.version || "Node",
     "Sistema Operacional": process.platform || "Windows",
-    "URL Base": "https://jurisprudencia.aasp.org.br"
+    "URL Base": "aaspgerenciador.aasp.org.br"
   };
 
   const pasta = "allure-results";
