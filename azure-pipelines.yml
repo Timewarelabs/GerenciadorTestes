@@ -9,7 +9,7 @@ steps:
     displayName: Install Docker
 
   - script: |
-      echo "buildando imagem docker"
+      echo "build imagem docker"
       docker build -t testes-gerenciador:latest .
     displayName: Build Docker Image
 
@@ -20,8 +20,8 @@ steps:
         testes-gerenciador:latest
     displayName: Run Tests in Docker
 
-  # Publica o relatório Allure
   - task: PublishAllureReport@1
+    condition: always()
     displayName: Publish Allure Report
     inputs:
       testResultsDir: '$(System.DefaultWorkingDirectory)/allure-results'
