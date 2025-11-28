@@ -29,7 +29,7 @@ async function enviarArquivosAllure(projectId, limparAntes = false) {
   if (limparAntes) {
     console.log(`Limpando resultados anteriores do projeto '${projectId}'...`);
     try {
-      await axios.get(`${ALLURE_SERVER_URL}/allure-docker-service/clean-history?project_id=${projectId}`);
+      await axios.get(`${ALLURE_SERVER_URL}/allure-docker-service/clean-results?project_id=${projectId}`);
       await axios.get(`${ALLURE_SERVER_URL}/allure-docker-service/clean-history?project_id=${projectId}`);
     } catch {
       console.warn(`Falha ao limpar resultados do projeto '${projectId}'.`);
@@ -62,11 +62,6 @@ export async function enviarResultadosParaServidor() {
   }
 
   try {
-    if (!fs.existsSync(RESULTS_DIR) || fs.readdirSync(RESULTS_DIR).length === 0) {
-      console.warn("A pasta allure-results está vazia. Nenhum arquivo para enviar.");
-      return;
-    }
-
     await enviarArquivosAllure(PROJECT_IMEDIATO, true);
     await enviarArquivosAllure(PROJECT_HISTORICO, false);
 
