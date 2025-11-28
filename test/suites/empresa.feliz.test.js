@@ -46,52 +46,49 @@ describe("Testes Caminho Feliz Empresa", function () {
     it('Deve registrar empresa (apenas obrigatórios)', async function () {
         console.log("Teste: Criar empresa (obrigatórios)");
         allure.parentSuite("CaminhoFeliz");
-        allure.suite("TesteEmpresa");
-        allure.subSuite("TesteCriarEmpresaObrigatorio");
+        allure.suite("Empresa");
+        allure.subSuite("CriarEmpresaObrigatorio");
         
         await CriarEmpresaObrigatorio(driver);
     });
 
     it('Deve registrar uma empresa completa', async function () {
-        console.log("Teste: Criar empresa completa");
+        console.log(": Criar empresa completa");
         allure.parentSuite("CaminhoFeliz");
-        allure.suite("TesteEmpresa");
-        allure.subSuite("TesteCriarEmpresa");
+        allure.suite("Empresa");
+        allure.subSuite("CriarEmpresa");
         
         await CriarEmpresa(driver);
     });
 
     it('Deve atualizar dados da empresa', async function () {
-        console.log("Teste: Atualizar empresa");
+        console.log(": Atualizar empresa");
         const cnpjPesquisa = "51.690.476/0001-32";
         
         allure.parentSuite("CaminhoFeliz");
-        allure.suite("TesteEmpresa");
-        allure.subSuite("TesteAtualizarEmpresa");
+        allure.suite("Empresa");
+        allure.subSuite("AtualizarEmpresa");
         
         await PesquisarEmpresa(driver, cnpjPesquisa);
         await AtualizarEmpresa(driver);
     });
 
     it('Deve atualizar e-mail da empresa', async function () {
-        console.log("Teste: Atualizar e-mail da empresa");
         const cnpjPesquisa = "51.690.476/0001-32";
-        
         allure.parentSuite("CaminhoFeliz");
-        allure.suite("TesteEmpresa");
-        allure.subSuite("TesteAtualizarEmailEmpresa");
+        allure.suite("Empresa");
+        allure.subSuite("AtualizarEmailEmpresa");
         
         await PesquisarEmpresa(driver, cnpjPesquisa);
         await AtualizarEmailEmpresa(driver);
     });
 
     it('Deve excluir empresa', async function () {
-        console.log("Teste: Excluir empresa");
         const cnpjPesquisa = "46.295.498/0001-68";
         
         allure.parentSuite("CaminhoFeliz");
-        allure.suite("TesteEmpresa");
-        allure.subSuite("TesteExcluirEmpresa");
+        allure.suite("Empresa");
+        allure.subSuite("ExcluirEmpresa");
         
         await PesquisarEmpresa(driver, cnpjPesquisa);
         await ExcluirEmpresa(driver);

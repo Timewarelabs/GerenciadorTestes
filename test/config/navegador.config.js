@@ -15,25 +15,28 @@ export async function configurarDriver() {
 
     switch (navegador) {
         case "chrome":
-            const opcoesChrome = new chrome.Options();
-            opcoesChrome.addArguments("--start-maximized");       
-            opcoesChrome.addArguments("--disable-gpu");           
-            opcoesChrome.addArguments("--no-sandbox");            
-            opcoesChrome.addArguments("--disable-dev-shm-usage"); 
-            opcoesChrome.addArguments("--incognito");
-            // opcoesChrome.addArguments("--headless=new");
+            const optionsChrome = new chrome.Options();
+            optionsChrome.addArguments("--no-sandbox");            
+            optionsChrome.addArguments("--disable-dev-shm-usage"); 
+            optionsChrome.addArguments("--disable-gpu");           
+            optionsChrome.addArguments("--start-maximized");
+            optionsChrome.addArguments('--window-size=1920,1080');   
+            optionsChrome.addArguments('--force-device-scale-factor=1');    
+            optionsChrome.addArguments("--incognito");
+            // optionsChrome.addArguments("--headless=new");
 
             driver = await new Builder()
                 .forBrowser("chrome")
-                .setChromeOptions(opcoesChrome)
+                .setChromeOptions(optionsChrome)
                 .build();
+                await driver.manage().window().setRect({ width: 1920, height: 1080 });
             break;
 
         case "firefox":
         default:
-            const opcoesFirefox = new firefox.Options();
-            opcoesFirefox.setAcceptInsecureCerts(true);                  
-            opcoesFirefox.setPreference("network.cookie.cookieBehavior", 0); 
+            const optionsFirefox = new firefox.Options();
+            optionsFirefox.setAcceptInsecureCerts(true);                  
+            optionsFirefox.setPreference("network.cookie.cookieBehavior", 0); 
 
             let servicoGecko;
 
@@ -55,7 +58,7 @@ export async function configurarDriver() {
             }
             let builderFirefox = new Builder()
                 .forBrowser("firefox")
-                .setFirefoxOptions(opcoesFirefox);
+                .setFirefoxOptions(optionsFirefox);
 
                 
             if (servicoGecko) {

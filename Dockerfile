@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
     chromium \
     chromium-driver \
     unzip \
-     xvfb \
+    xvfb \
     && rm -rf /var/lib/apt/lists/*
 
 RUN GECKO_VERSION=$(wget -qO- https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep tag_name | cut -d '"' -f 4) \
