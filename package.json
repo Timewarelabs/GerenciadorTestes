@@ -14,6 +14,9 @@
     "test:contrato:feliz": "mocha test/suites/contrato.feliz.test.js",
     "test:contrato:triste": "mocha test/suites/contrato.triste.test.js",
     "test:contrato:todos": "mocha test/suites/contrato.*.test.js",
+    
+    "test:processo:feliz": "mocha test/suites/processo.feliz.test.js",
+    "test:processo:triste": "mocha test/suites/processo.triste.test.js",
 
     "set:chrome": "node test/config/definir-navegador.js chrome",
     "set:firefox": "node test/config/definir-navegador.js firefox",
