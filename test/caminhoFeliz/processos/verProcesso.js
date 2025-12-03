@@ -1,15 +1,12 @@
 import { By, until } from 'selenium-webdriver';
 import * as allure from "allure-js-commons";
-// Importando o serviço de screenshot padronizado (subindo 3 pastas para chegar em test/comum)
 import { tirarPrint } from "../../comum/tirarPrint.js"; 
-// Ajustando caminho para a config (subindo 2 pastas para chegar em config)
 import { obterBaseUrl } from "../../config/global.config.js"; 
 
-// Renomeada: viewProcess -> verProcesso
 async function verProcesso(driver) {
     try {
         await allure.step("Acessando página de listagem de processos", async (ctx) => {
-            await driver.get(`${obterBaseUrl()}/processos/`); // Usando config
+            await driver.get(`${obterBaseUrl()}/processos/`);
             const urlAtual = await driver.getCurrentUrl();
             allure.attachment("URL", urlAtual, "text/plain");
             await ctx.parameter("Status", "200");
@@ -19,7 +16,7 @@ async function verProcesso(driver) {
 
         await allure.step("Fechando o modal de tour/boas-vindas", async (ctx) => {
             try {
-                const botaoFechar = await driver.wait( // Renomeada: closeButton
+                const botaoFechar = await driver.wait(
                     until.elementLocated(By.css('button.sc-bxivhb.eTpeTG.sc-bdVaJa.jRQxUV')), 
                     15000 
                 );
@@ -56,7 +53,7 @@ async function verProcesso(driver) {
                 
                 await driver.sleep(500);
 
-                const linhasProcesso = await driver.findElements( // Renomeada: linesProcess
+                const linhasProcesso = await driver.findElements(
                     By.xpath("//tbody[contains(@class, 'MuiTableBody-root')]/tr[contains(@class, 'MuiTableRow-root') and not(contains(@class, 'MuiTableRow-head'))]") 
                 );
                 
@@ -67,13 +64,13 @@ async function verProcesso(driver) {
 
                 await driver.wait(until.elementIsVisible(linhasProcesso[0]), 10000);
                 
-                const primeiroProcesso = linhasProcesso[0]; // Renomeada: firstProcess
+                const primeiroProcesso = linhasProcesso[0];
                 
                 try {
                     await driver.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'center'});", primeiroProcesso); 
                     await driver.sleep(500); 
                     await driver.executeScript("arguments[0].click();", primeiroProcesso);
-                } catch (erroCliqueJS) { // Renomeada: jsClickError
+                } catch (erroCliqueJS) {
                     await tirarPrint(driver, "Erro_clique_com_JavaScript");
                     throw new Error(`Falha ao clicar no processo com JavaScript. Erro JS Click: ${erroCliqueJS.message}`);
                 }
@@ -95,13 +92,10 @@ async function verProcesso(driver) {
         });
 
     } catch (error) {
-        // Usando o serviço padronizado no catch principal
         await tirarPrint(driver, "Falha geral ao visualizar processo");
         allure.attachment("Error", error.message, "text/plain");
         throw new Error("Falha ao visualizar processo: " + error.message);
     }
 }
-
-// Removida a função takeScreenshot local
 
 export { verProcesso };

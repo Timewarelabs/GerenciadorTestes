@@ -1,12 +1,9 @@
 import { By, until, Key } from 'selenium-webdriver';
 import * as allure from "allure-js-commons";
 import assert from 'assert';
-// Importando o serviço de screenshot padronizado
 import { tirarPrint } from "../../comum/tirarPrint.js"; 
-// Ajustando caminho para a config
 import { obterBaseUrl } from "../../config/global.config.js"; 
 
-// Renomeada: failedCreateProcessWithoutInstance -> falhaCriarProcessoSemInstancia
 async function falhaCriarProcessoSemInstancia(driver) {
     try {
         await allure.step("Acessando página de listagem de processos", async (ctx) => {
@@ -20,7 +17,7 @@ async function falhaCriarProcessoSemInstancia(driver) {
 
         await allure.step("Fechando o modal de tour/boas-vindas", async (ctx) => {
             try {
-                const botaoFechar = await driver.wait( // Renomeada: closeButton
+                const botaoFechar = await driver.wait(
                     until.elementLocated(By.css('button.sc-bxivhb.eTpeTG.sc-bdVaJa.jRQxUV')),
                     15000 
                 );
@@ -56,7 +53,7 @@ async function falhaCriarProcessoSemInstancia(driver) {
                 
                 await driver.sleep(500);
 
-                const linhasProcesso = await driver.findElements( // Renomeada: linesProcess
+                const linhasProcesso = await driver.findElements(
                     By.xpath("//tbody[contains(@class, 'MuiTableBody-root')]/tr[contains(@class, 'MuiTableRow-root') and not(contains(@class, 'MuiTableRow-head'))]") 
                 );
                 
@@ -67,13 +64,13 @@ async function falhaCriarProcessoSemInstancia(driver) {
 
                 await driver.wait(until.elementIsVisible(linhasProcesso[0]), 10000);
                 
-                const primeiroProcesso = linhasProcesso[0]; // Renomeada: firstProcess
+                const primeiroProcesso = linhasProcesso[0];
 
                 try {
                     await driver.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'center'});", primeiroProcesso);
                     await driver.sleep(500); 
                     await driver.executeScript("arguments[0].click();", primeiroProcesso);
-                } catch (erroCliqueJS) { // Renomeada: jsClickError
+                } catch (erroCliqueJS) {
                     await tirarPrint(driver, "Erro_clique_com_JavaScript");
                     throw new Error(`Falha ao clicar no processo com JavaScript. Erro JS Click: ${erroCliqueJS.message}`);
                 }
@@ -94,7 +91,7 @@ async function falhaCriarProcessoSemInstancia(driver) {
                 await driver.executeScript("window.scrollTo(0, document.body.scrollHeight);");
                 await driver.sleep(1000); 
                 
-                const btnSalvarProcesso = await driver.wait( // Renomeada: btnSaveProcess
+                const btnSalvarProcesso = await driver.wait(
                     until.elementLocated(By.css('[data-testid="btn_save_process"]')),
                     10000
                 );
@@ -120,8 +117,7 @@ async function falhaCriarProcessoSemInstancia(driver) {
 
         await allure.step("Verificando se modal de erro foi exibido", async (ctx) => {
             try {
-                // Espera pelo título do modal de erro
-                const tituloModalErro = await driver.wait( // Renomeada: errorModalTitle
+                const tituloModalErro = await driver.wait(
                     until.elementLocated(By.xpath("//h6[contains(text(), 'Houve um problema')]")),
                     5000
                 );
@@ -149,13 +145,10 @@ async function falhaCriarProcessoSemInstancia(driver) {
         });
 
     } catch (error) {
-        // Usando o serviço padronizado no catch principal
         await tirarPrint(driver, "Falha geral ao criar processo sem instancia");
         allure.attachment("Error", error.message, "text/plain");
         throw new Error("Falha ao salvar processo sem instância: " + error.message);
     }
 }
-
-// Removida a função takeScreenshot local
 
 export { falhaCriarProcessoSemInstancia };

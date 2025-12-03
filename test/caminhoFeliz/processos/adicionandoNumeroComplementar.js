@@ -1,15 +1,12 @@
 import { By, until, Key } from 'selenium-webdriver';
 import * as allure from "allure-js-commons";
-// Importando o serviço de screenshot padronizado (subindo 3 pastas para chegar em test/comum)
 import { tirarPrint } from "../../comum/tirarPrint.js"; 
-// Ajustando caminho para a config (subindo 2 pastas para chegar em config)
 import { obterBaseUrl } from "../../config/global.config.js"; 
 
-// Renomeada: addingComplementaryNumber -> adicionandoNumeroComplementar
 async function adicionandoNumeroComplementar(driver) {
     try {
         await allure.step("Acessando página de listagem de processos", async (ctx) => {
-            await driver.get(`${obterBaseUrl()}/processos/`); // Usando config
+            await driver.get(`${obterBaseUrl()}/processos/`); 
             const urlAtual = await driver.getCurrentUrl();
             allure.attachment("URL", urlAtual, "text/plain");
             await ctx.parameter("Status", "200");
@@ -19,7 +16,7 @@ async function adicionandoNumeroComplementar(driver) {
 
         await allure.step("Fechando o modal de tour/boas-vindas", async (ctx) => {
             try {
-                const botaoFechar = await driver.wait( // Renomeada: closeButton
+                const botaoFechar = await driver.wait(
                     until.elementLocated(By.css('button.sc-bxivhb.eTpeTG.sc-bdVaJa.jRQxUV')), 
                     15000 
                 );
@@ -55,7 +52,7 @@ async function adicionandoNumeroComplementar(driver) {
                 
                 await driver.sleep(500);
 
-                const linhasProcesso = await driver.findElements( // Renomeada: linesProcess
+                const linhasProcesso = await driver.findElements(
                     By.xpath("//tbody[contains(@class, 'MuiTableBody-root')]/tr[contains(@class, 'MuiTableRow-root') and not(contains(@class, 'MuiTableRow-head'))]") 
                 );
                 
@@ -66,13 +63,13 @@ async function adicionandoNumeroComplementar(driver) {
 
                 await driver.wait(until.elementIsVisible(linhasProcesso[0]), 10000);
                 
-                const primeiroProcesso = linhasProcesso[0]; // Renomeada: firstProcess
+                const primeiroProcesso = linhasProcesso[0]; 
                 
                 try {
                     await driver.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'center'});", primeiroProcesso); 
                     await driver.sleep(500); 
                     await driver.executeScript("arguments[0].click();", primeiroProcesso);
-                } catch (erroCliqueJS) { // Renomeada: jsClickError
+                } catch (erroCliqueJS) {
                     await tirarPrint(driver, "Erro_clique_com_JavaScript");
                     throw new Error(`Falha ao clicar no processo com JavaScript. Erro JS Click: ${erroCliqueJS.message}`);
                 }
@@ -89,7 +86,7 @@ async function adicionandoNumeroComplementar(driver) {
 
         await allure.step("Preenchendo o campo: Número do Processo Complementar", async (ctx) => {
             try {
-                const campoInput = await driver.wait( // Renomeada: inputField -> campoInput
+                const campoInput = await driver.wait( 
                     until.elementLocated(By.css('[data-testid="complementary_number_process"]')), 
                     10000
                 );
@@ -110,7 +107,7 @@ async function adicionandoNumeroComplementar(driver) {
 
         await allure.step("Expandindo seção '1ª Instância'", async (ctx) => {
             try {
-                const botaoPrimeiraInstancia = await driver.wait( // Renomeada: buttonFirstInstance
+                const botaoPrimeiraInstancia = await driver.wait(
                     until.elementLocated(By.xpath("//button[.//span[contains(text(), '1ª Instância')]]")),
                     10000
                 );
@@ -144,7 +141,7 @@ async function adicionandoNumeroComplementar(driver) {
 
         await allure.step("Preenchendo o campo 'Título'", async (ctx) => {
             try {
-                const inputTitulo = await driver.wait( // Renomeada: inputTitle
+                const inputTitulo = await driver.wait(
                     until.elementLocated(By.css('input[name="Título"]')),
                     10000
                 );
@@ -168,7 +165,7 @@ async function adicionandoNumeroComplementar(driver) {
         await allure.step("Criando parte de processo", async (ctx) => {
             try {
                 await driver.wait(until.elementLocated(By.css('[data-testid="btn_parts"]')), 10000);
-                const btnAdicionarPartes = await driver.findElement(By.css('[data-testid="btn_parts"]')); // Renomeada: btnAddParts
+                const btnAdicionarPartes = await driver.findElement(By.css('[data-testid="btn_parts"]'));
                 
                 await driver.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'center'});", btnAdicionarPartes);
                 await driver.sleep(500);
@@ -176,12 +173,12 @@ async function adicionandoNumeroComplementar(driver) {
                 await driver.executeScript("arguments[0].click();", btnAdicionarPartes);
                 await driver.sleep(1000);
 
-                const btnFecharModal = await driver.findElements(By.css('button.sc-bxivhb.eTpeTG.sc-bdVaJa.jRQxUV')); // Renomeada: closeModalBtn
+                const btnFecharModal = await driver.findElements(By.css('button.sc-bxivhb.eTpeTG.sc-bdVaJa.jRQxUV'));
                 if (btnFecharModal.length > 0) {
                     await driver.executeScript("arguments[0].click();", btnFecharModal[0]);
                     await driver.sleep(1000); 
                 }                                
-                const inputParte = await driver.wait(until.elementLocated(By.id("parte")), 10000); // Renomeada: inputPart
+                const inputParte = await driver.wait(until.elementLocated(By.id("parte")), 10000); 
 
                 await driver.executeScript("arguments[0].scrollIntoView({block: 'center'});", inputParte);
                 await inputParte.click();
@@ -190,7 +187,7 @@ async function adicionandoNumeroComplementar(driver) {
                 await inputParte.sendKeys('t');
                 await driver.sleep(500);
 
-                const botaoAdicionar = await driver.wait( // Renomeada: addButton
+                const botaoAdicionar = await driver.wait(
                     until.elementLocated(By.xpath("//p[normalize-space(.)='ADICIONAR NOVA PESSOA']")),
                     10000
                 );
@@ -198,7 +195,7 @@ async function adicionandoNumeroComplementar(driver) {
 
                 await driver.sleep(1000);
 
-                const inputCpf = await driver.wait( // Renomeada: inputCPF
+                const inputCpf = await driver.wait(
                     until.elementLocated(By.css('div[data-testid="input_cpf"] input[type="text"]')),
                     10000
                 );
@@ -211,7 +208,7 @@ async function adicionandoNumeroComplementar(driver) {
                 await driver.sleep(550);
                 await driver.actions().sendKeys(Key.TAB, Key.TAB, Key.TAB, Key.ENTER).perform();
 
-                const inputPosicao = await driver.wait( // Renomeada: positionInput
+                const inputPosicao = await driver.wait(
                     until.elementLocated(By.name('posicao')),
                     10000
                 );
@@ -219,7 +216,7 @@ async function adicionandoNumeroComplementar(driver) {
                 await inputPosicao.sendKeys('adm', Key.ENTER);
                 await driver.sleep(1000);
 
-                const checkboxCliente = await driver.wait( // Renomeada: clientCheckbox
+                const checkboxCliente = await driver.wait(
                     until.elementLocated(By.xpath("//label[contains(., 'Esta parte é cliente')]//input[@type='checkbox']")),
                     10000
                 );
@@ -243,7 +240,7 @@ async function adicionandoNumeroComplementar(driver) {
                 await driver.sleep(1000); 
 
                 await driver.wait(until.elementLocated(By.css('[data-testid="btn_save_process"]')), 10000);
-                const btnSalvarProcesso = await driver.findElement(By.css('[data-testid="btn_save_process"]')); // Renomeada: btnSaveProcess
+                const btnSalvarProcesso = await driver.findElement(By.css('[data-testid="btn_save_process"]'));
                 console.log('Botão encontrado');
 
                 await driver.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'center'});", btnSalvarProcesso);
@@ -259,18 +256,15 @@ async function adicionandoNumeroComplementar(driver) {
                 console.error('Erro: ', error)
                 await ctx.parameter("Status", "400");
                 await tirarPrint(driver, "Erro_ao_clicar_no_botao_salvar_processo");
-                throw error; // Removido assert.fail redundante com throw
+                throw error;
             }
         });
 
     } catch (error) {
-        // Usando o serviço padronizado no catch principal
         await tirarPrint(driver, "Falha geral ao adicionar numero complementar");
         allure.attachment("Error", error.message, "text/plain");
         throw new Error("Falha ao alterar processo: " + error.message);
     }
 }
-
-// Removida a função takeScreenshot local
 
 export { adicionandoNumeroComplementar };

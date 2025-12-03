@@ -1,13 +1,10 @@
 import { By, until } from 'selenium-webdriver';
 import * as allure from "allure-js-commons";
-// Importando o serviço de screenshot padronizado
 import { tirarPrint } from "../../comum/tirarPrint.js"; 
-// Ajustando caminho para a config
 import { obterBaseUrl } from "../../config/global.config.js"; 
 
-// Renomeada: blockingProcess -> bloquearProcesso
 async function bloquearProcesso(driver) {
-    let primeiroProcesso = null; // Renomeada: firstProcess
+    let primeiroProcesso = null;
 
     try {
         await allure.step("Acessando página de listagem de processos", async (ctx) => {
@@ -21,7 +18,7 @@ async function bloquearProcesso(driver) {
 
         await allure.step("Fechando o modal de tour/boas-vindas", async (ctx) => {
             try {
-                const botaoFechar = await driver.wait( // Renomeada: closeButton
+                const botaoFechar = await driver.wait(
                     until.elementLocated(By.css('button.sc-bxivhb.eTpeTG.sc-bdVaJa.jRQxUV')),
                     15000
                 );
@@ -50,7 +47,7 @@ async function bloquearProcesso(driver) {
                     await driver.wait(until.elementIsNotVisible(spinner), 10000);
                 } catch {}
 
-                const linhasProcesso = await driver.findElements( // Renomeada: linesProcess
+                const linhasProcesso = await driver.findElements(
                     By.xpath("//tbody[contains(@class, 'MuiTableBody-root')]/tr[contains(@class, 'MuiTableRow-root') and not(contains(@class, 'MuiTableRow-head'))]")
                 );
 
@@ -92,7 +89,7 @@ async function bloquearProcesso(driver) {
             try {
                 await driver.sleep(1000);
 
-                const opcaoBloquear = await driver.wait( // Renomeada: blockProcess -> opcaoBloquear
+                const opcaoBloquear = await driver.wait(
                     until.elementLocated(By.xpath("/html/body/div[4]/div[2]/ul/li[2]")),
                     10000 
                 );
@@ -119,7 +116,5 @@ async function bloquearProcesso(driver) {
         throw new Error(`Falha ao bloquear processo: ${error.message}`);
     }
 }
-
-// Removida a função takeScreenshot local
 
 export { bloquearProcesso };

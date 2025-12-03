@@ -1,16 +1,12 @@
 import { By, until } from 'selenium-webdriver';
 import * as allure from "allure-js-commons";
 import assert from 'assert';
-// Importando o serviço de screenshot padronizado
 import { tirarPrint } from "../../comum/tirarPrint.js"; 
-// Ajustando caminho para a config
 import { obterBaseUrl } from "../../config/global.config.js"; 
 
-// Renomeada: failedCreateProcess -> falhaCriarProcesso
 async function falhaCriarProcesso(driver) {
     try {
         await allure.step("Acessando página de cadastro de processos", async (ctx) => {
-            // Usando config, mas mantendo a rota específica /processos/novo se for o caso
             await driver.get(`${obterBaseUrl()}/processos/novo`); 
             const urlAtual = await driver.getCurrentUrl();
             allure.attachment("URL", urlAtual, "text/plain");
@@ -20,7 +16,7 @@ async function falhaCriarProcesso(driver) {
 
         await allure.step("Fechando o modal inicial 'Cadastro de processo'", async (ctx) => {
             try {
-                const botaoFinalizar = await driver.wait( // Renomeada: finishButton -> botaoFinalizar
+                const botaoFinalizar = await driver.wait( 
                     until.elementLocated(By.css('button[data-tour-elem="right-arrow"]')),
                     10000 
                 );
@@ -35,8 +31,6 @@ async function falhaCriarProcesso(driver) {
                 await driver.sleep(500); 
             } catch (error) {
                 await ctx.parameter("Status", "400"); 
-                // AVISO: Não falha o teste se o modal não aparecer (pode já ter sido fechado)
-                // await takeScreenshot(driver, "Erro_ao_fechar_modal_Cadastro_de_Processo");
                 console.warn("AVISO: Não foi possível fechar o modal 'Cadastro de processo'. Erro: " + error.message);
             }
         });
@@ -44,7 +38,7 @@ async function falhaCriarProcesso(driver) {
         await allure.step("Clicando no botão para salvar o processo (sem preencher dados)", async (ctx) => {
             try {
                 await driver.wait(until.elementLocated(By.css('[data-testid="btn_save_process"]')), 10000);
-                const btnSalvarProcesso = await driver.findElement(By.css('[data-testid="btn_save_process"]')); // Renomeada: btnSaveProcess
+                const btnSalvarProcesso = await driver.findElement(By.css('[data-testid="btn_save_process"]')); 
                 console.log('Botao salvar encontrado');
 
                 await driver.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'center'});", btnSalvarProcesso);
@@ -64,8 +58,7 @@ async function falhaCriarProcesso(driver) {
 
         await allure.step("Verificando se modal de erro foi exibido", async (ctx) => {
             try {
-                // Espera pelo título do modal de erro
-                const tituloModalErro = await driver.wait( // Renomeada: errorModalTitle -> tituloModalErro
+                const tituloModalErro = await driver.wait( 
                     until.elementLocated(By.xpath("//h6[contains(text(), 'Houve um problema')]")),
                     5000
                 );
@@ -88,19 +81,15 @@ async function falhaCriarProcesso(driver) {
                 await allure.label("bug", "Modal de erro ausente — falha de validação");
                 await allure.issue("BUG-005", "Processo inválido foi aceito ou modal de erro não foi exibido");
                 await tirarPrint(driver, "BUG_-_Modal_nao_exibido_apos_process_invalido");
-                // Lança o erro para falhar o teste
                 throw new Error("BUG: Modal de erro não foi exibido após tentar salvar processo inválido. O sistema pode ter aceitado o cadastro ou travado.");
             }
         });
         
     } catch (error) {
-        // Usando o serviço padronizado no catch principal
         await tirarPrint(driver, "Falha geral ao criar processo invalido");
         allure.attachment("Error", error.message, "text/plain");
         throw new Error("Falha ao criar processo (Sad Path): " + error.message);
     }
 }
-
-// Removida a função takeScreenshot local
 
 export { falhaCriarProcesso };

@@ -1,17 +1,14 @@
 import { By, until } from 'selenium-webdriver';
 import * as allure from "allure-js-commons";
-// Importando o serviço de screenshot padronizado (subindo 3 pastas para chegar em test/comum)
 import { tirarPrint } from "../../comum/tirarPrint.js"; 
-// Ajustando caminho para a config (subindo 2 pastas para chegar em config)
 import { obterBaseUrl } from "../../config/global.config.js";
 
-// Renomeada: deleteProcess -> excluirProcesso
 async function excluirProcesso(driver) {
-    let primeiroProcesso = null; // Renomeada: firstProcess
+    let primeiroProcesso = null;
 
     try {
         await allure.step("Acessando página de listagem de processos", async (ctx) => {
-            await driver.get(`${obterBaseUrl()}/processos/`); // Usando config
+            await driver.get(`${obterBaseUrl()}/processos/`);
             const urlAtual = await driver.getCurrentUrl();
             allure.attachment("URL", urlAtual, "text/plain");
             await ctx.parameter("Status", "200");
@@ -21,7 +18,7 @@ async function excluirProcesso(driver) {
 
         await allure.step("Fechando o modal de tour/boas-vindas", async (ctx) => {
             try {
-                const botaoFechar = await driver.wait( // Renomeada: closeButton
+                const botaoFechar = await driver.wait(
                     until.elementLocated(By.css('button.sc-bxivhb.eTpeTG.sc-bdVaJa.jRQxUV')),
                     15000
                 );
@@ -50,7 +47,7 @@ async function excluirProcesso(driver) {
                     await driver.wait(until.elementIsNotVisible(spinner), 10000);
                 } catch {}
 
-                const linhasProcesso = await driver.findElements( // Renomeada: linesProcess
+                const linhasProcesso = await driver.findElements( 
                     By.xpath("//tbody[contains(@class, 'MuiTableBody-root')]/tr[contains(@class, 'MuiTableRow-root') and not(contains(@class, 'MuiTableRow-head'))]")
                 );
 
@@ -73,7 +70,7 @@ async function excluirProcesso(driver) {
 
         await allure.step("Clicando no botão de opções (três pontinhos)", async (ctx) => {
             try {
-                const botaoOpcoes = await primeiroProcesso.findElement(By.xpath(".//button[@aria-label='Opções']")); // Renomeada: optionsButton
+                const botaoOpcoes = await primeiroProcesso.findElement(By.xpath(".//button[@aria-label='Opções']"));
                 await driver.executeScript("arguments[0].scrollIntoView({block: 'center'});", botaoOpcoes);
                 await driver.wait(until.elementIsVisible(botaoOpcoes), 5000);
                 await driver.wait(until.elementIsEnabled(botaoOpcoes), 5000);
@@ -91,10 +88,6 @@ async function excluirProcesso(driver) {
         await allure.step("Clicando na opção 'Excluir processo'", async (ctx) => {
             try {
                 await driver.sleep(1000);
-
-                // Ação de navegar com setas/tab para a opção de excluir e selecionar
-                // O código original usava apenas um ENTER direto, assumindo que o foco já estava lá ou usando atalho.
-                // Mantendo a lógica original:
                 await driver.actions().sendKeys('\uE007').perform(); // Key.ENTER
 
                 await driver.sleep(1000);
@@ -109,7 +102,7 @@ async function excluirProcesso(driver) {
 
         await allure.step("Confirmando a exclusão do processo", async (ctx) => {
             try {
-                const botaoConfirmar = await driver.wait( // Renomeada: confirmarButton -> botaoConfirmar
+                const botaoConfirmar = await driver.wait(
                     until.elementLocated(By.css('[data-testid="btn_confirm_process"]')),
                     10000
                 );
@@ -134,7 +127,5 @@ async function excluirProcesso(driver) {
         throw new Error(`Falha ao deletar processo: ${error.message}`);
     }
 }
-
-// Removida a função takeScreenshot local
 
 export { excluirProcesso };
