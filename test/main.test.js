@@ -13,6 +13,13 @@ await import("./suites/empresa.feliz.test.js");
 await import("./suites/empresa.triste.test.js");
 await import("./suites/pessoa.feliz.test.js");
 await import("./suites/pessoa.triste.test.js");
+await import("./suites/processo.feliz.test.js");
+await import("./suites/processo.triste.test.js");
+await import("./suites/intimacoes.feliz.test.js");
+await import("./suites/intimacoes.triste.test.js");
+await import("./suites/agenda.feliz.test.js");
+await import("./suites/agenda.triste.test.js");
+
 
 after(async () => {
   try {
