@@ -1,4 +1,5 @@
 import { limparAllureResults, enviarResultadosParaServidor } from "../scripts/servicos-allure.js";
+import { enviarEmail } from "../scripts/enviar-email.js";
 
 global.__EXECUCAO_REGRESSIVA__ = true;
 
@@ -18,6 +19,7 @@ after(async () => {
   try {
     console.log("Execução Regressiva → enviando resultados");
     enviarResultadosParaServidor();
+    enviarEmail();
   } catch (e) {
     console.log("Erro ao enviar resultados para o servidor.");
   }
