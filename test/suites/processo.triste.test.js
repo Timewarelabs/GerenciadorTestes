@@ -11,7 +11,7 @@ import { falhaCriarProcessoSemPartes } from "../caminhoTriste/processos/falhaCri
 
 const isRegressivo = global.__EXECUCAO_REGRESSIVA__ === true;
 
-describe("Testes Caminho Feliz Pessoa", function () {
+describe("Testes Caminho Triste Processos", function () {
     this.timeout(60000);
     let driver;
 

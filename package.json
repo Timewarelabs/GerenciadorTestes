@@ -18,6 +18,14 @@
     "test:processo:feliz": "mocha test/suites/processo.feliz.test.js",
     "test:processo:triste": "mocha test/suites/processo.triste.test.js",
 
+    "test:intimacoes:feliz": "mocha test/suites/intimacoes.feliz.test.js",
+    "test:intimacoes:triste": "mocha test/suites/intimacoes.triste.test.js",
+    "test:intimacoes:todos": "mocha test/suites/contrato.*.test.js",
+
+    "test:agenda:feliz": "mocha test/suites/agenda.feliz.test.js",
+    "test:agenda:triste": "mocha test/suites/agenda.triste.test.js",
+
+
     "set:chrome": "node test/config/definir-navegador.js chrome",
     "set:firefox": "node test/config/definir-navegador.js firefox",
 

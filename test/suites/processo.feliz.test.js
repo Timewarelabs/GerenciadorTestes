@@ -13,7 +13,7 @@ import { adicionandoNumeroComplementar } from "../caminhoFeliz/processos/adicion
 
 const isRegressivo = global.__EXECUCAO_REGRESSIVA__ === true;
 
-describe("Testes Caminho Feliz Pessoa", function () {
+describe("Testes Caminho Feliz Processos", function () {
     this.timeout(60000);
     let driver;
 
