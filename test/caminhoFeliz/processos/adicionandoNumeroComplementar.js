@@ -164,8 +164,8 @@ async function adicionandoNumeroComplementar(driver) {
 
         await allure.step("Criando parte de processo", async (ctx) => {
             try {
-                await driver.wait(until.elementLocated(By.css('[data-testid="btn_parts"]')), 10000);
-                const btnAdicionarPartes = await driver.findElement(By.css('[data-testid="btn_parts"]'));
+                await driver.wait(until.elementLocated(By.css('[data-testid="btn_parts_process"]')), 10000);
+                const btnAdicionarPartes = await driver.findElement(By.css('[data-testid="btn_parts_process"]'));
                 
                 await driver.executeScript("arguments[0].scrollIntoView({block: 'center', inline: 'center'});", btnAdicionarPartes);
                 await driver.sleep(500);
