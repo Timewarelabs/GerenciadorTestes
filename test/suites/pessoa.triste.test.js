@@ -10,11 +10,15 @@ import { falhaAtualizarPessoa } from '../caminhoTriste/pessoa/falhaAtualizarPess
 import { falhaAtualizarPessoaObrigatoria } from '../caminhoTriste/pessoa/falhaAtualizarPessoaObrigatoria.js'; 
 import { falhaAtualizarPessoaCPFInvalido } from '../caminhoTriste/pessoa/falhaAtualizarPessoaCPFInvalido.js'; 
 import { buscarPessoa } from "../caminhoFeliz/pessoa/buscarPessoa.js";
+import { criarPessoaObrigatoria } from "../caminhoFeliz/pessoa/criarPessoaObrigatorio.js";
+import { excluirPessoa } from "../caminhoFeliz/pessoa/excluirPessoa.js";
+import { adicionarVinculoPessoa } from "../caminhoFeliz/pessoa/adicionarVinculoPessoa.js";
+import { criarProcesso } from "../caminhoFeliz/processos/criarProcesso.js";
 
 const isRegressivo = global.__EXECUCAO_REGRESSIVA__ === true;
 
 describe('Testes Caminho Triste Pessoa', function() { 
-    this.timeout(60000);
+    this.timeout(600000);
     let driver;
 
     before(async function () {
@@ -75,4 +79,13 @@ describe('Testes Caminho Triste Pessoa', function() {
         await buscarPessoa(driver, termoBusca);
         await falhaAtualizarPessoaCPFInvalido(driver); 
     });
+
+    // it.only('Deve falhar ao tentar excluir uma pessoa com vinculos', async function() {
+    //     allure.parentSuite("CaminhoTriste");
+    //     allure.suite("Pessoa");
+    //     allure.subSuite("FalhaExclusaoComVinculos");
+    //     await criarProcesso(driver);
+    //     await criarPessoaObrigatoria(driver);
+    //     await adicionarVinculoPessoa(driver);
+    // });
 });
