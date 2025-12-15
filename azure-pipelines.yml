@@ -1,0 +1,29 @@
+trigger: none      
+pr: none            
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: DockerInstaller@0
+    displayName: Install Docker
+
+  - script: |
+      echo "build imagem docker"
+      docker build -t testes-gerenciador:latest .
+    displayName: Build Docker Image
+
+  - script: |
+      echo "executando testes no container"
+      docker run --rm \
+        -v $(System.DefaultWorkingDirectory)/allure-results:/app/allure-results \
+        testes-gerenciador:latest
+    displayName: Run Tests in Docker
+
+  - task: PublishAllureReport@1
+    condition: always()
+    displayName: Publish Allure Report
+    inputs:
+      testResultsDir: '$(System.DefaultWorkingDirectory)/allure-results'
+      reportName: 'Test Report'
+      cleanupResultsDir: true

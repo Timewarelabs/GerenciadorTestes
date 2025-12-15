@@ -1,0 +1,73 @@
+{
+  "name": "gerenciador-testes-automatizados",
+  "version": "1.0.0",
+  "description": "Projeto de Testes Automatizados do Gerenciador AASP",
+  "type": "module",
+  "scripts": {
+    "test": "mocha test/main.test.js --reporter allure-mocha --timeout 60000",
+    "test:empresa:feliz" : "mocha test/suites/empresa.feliz.test",
+    "test:empresa:triste" : "mocha test/suites/empresa.triste.test",
+
+    "test:pessoa:feliz": "mocha test/suites/pessoa.feliz.test.js",
+    "test:pessoa:triste": "mocha test/suites/pessoa.triste.test.js",
+
+    "test:contrato:feliz": "mocha test/suites/contrato.feliz.test.js",
+    "test:contrato:triste": "mocha test/suites/contrato.triste.test.js",
+    "test:contrato:todos": "mocha test/suites/contrato.*.test.js",
+    
+    "test:processo:feliz": "mocha test/suites/processo.feliz.test.js",
+    "test:processo:triste": "mocha test/suites/processo.triste.test.js",
+
+    "test:intimacoes:feliz": "mocha test/suites/intimacoes.feliz.test.js",
+    "test:intimacoes:triste": "mocha test/suites/intimacoes.triste.test.js",
+    "test:intimacoes:todos": "mocha test/suites/contrato.*.test.js",
+
+    "test:agenda:feliz": "mocha test/suites/agenda.feliz.test.js",
+    "test:agenda:triste": "mocha test/suites/agenda.triste.test.js",
+
+
+    "set:chrome": "node test/config/definir-navegador.js chrome",
+    "set:firefox": "node test/config/definir-navegador.js firefox",
+
+    "set:prod": "node test/config/definir-ambiente.js prod",
+    "set:homolog": "node test/config/definir-ambiente.js homolog",
+    "set:local": "node test/config/definir-ambiente.js local",
+
+    "allure:report": "allure generate allure-results --clean -o allure-report",
+    "allure:open": "allure open allure-report",
+
+    "allure:api": "node scripts/abrir-servicos-allure.js api",
+    "allure:dash": "node scripts/abrir-servicos-allure.js dash",
+    "allure:dash:imediato": "node scripts/abrir-servicos-allure.js imediato",
+    "allure:dash:historico": "node scripts/abrir-servicos-allure.js historico",
+    
+    "allure:server:start": "docker-compose up -d allure allure-ui",
+    "allure:server:stop": "docker-compose down",
+    "allure:server:logs": "docker logs -f allure-api"
+  },
+  "mocha": {
+    "reporter": "allure-mocha",
+    "reporterOptions": [
+      "resultsDir=allure-results",
+      "extraReporters=spec"
+    ]
+  },
+  "devDependencies": {
+    "allure-commandline": "^2.34.0",
+    "allure-js-commons": "^3.2.0",
+    "allure-mocha": "^3.2.0",
+    "archiver": "^7.0.1",
+    "chromedriver": "^142",
+    "cross-env": "^7.0.3",
+    "fs-extra": "^11.2.0",
+    "geckodriver": "^5.0.0",
+    "mocha": "^11.2.2",
+    "mocha-multi-reporters": "^1.5.1",
+    "open": "^10.2.0",
+    "selenium-webdriver": "^4.21.0"
+  },
+  "dependencies": {
+    "axios": "^1.13.1",
+    "form-data": "^4.0.4"
+  }
+}
